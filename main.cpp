@@ -1,11 +1,12 @@
 #include <iostream>
 #include "AvlTree.h"
 #include <cassert>
-
+#include "AVL_tests.h"
 
 int main() {
     std::cout << "Hello, World!" << std::endl;
-    AvlTree <int ,int> sari;
+    //AVL_Basics();
+    /*AvlTree <int ,int> sari;
 
 
     assert(sari.remove(188)==NODE_DOESNT_EXISTS);
@@ -34,5 +35,5 @@ int main() {
 
 
 
-    return 0;
+    return 0;*/
 }
