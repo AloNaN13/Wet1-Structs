@@ -7,6 +7,127 @@
 
 
 #include "AvlTree.h"
+#include "Artist.h"
+
+typedef enum StreamListResult_t{
+    SUCCESS,
+    ALLOCATION_ERROR,
+    NODE_ALREADY_EXISTS,
+    NODE_DOESNT_EXISTS
+}StreamListResult;
+
+
+
+
+class StreamList{
+private:
+    class StreamListNode{
+    public:
+        int num_of_streams;
+        AvlTree<Artist*,int> stream_artists;
+        StreamListNode* prev_node;
+        StreamListNode* next_node;
+
+        StreamListNode(AvlTree<Artist*,int>& stream_artists, int num_of_streams):
+            stream_artists(stream_artists), num_of_streams(num_of_streams), prev_node(nullptr),
+            next_node(nullptr){};
+        ~StreamListNode() = default;
+        StreamListNode(const StreamListNode& node) = delete;
+        StreamListNode& operator=(const StreamListNode& node) = delete;
+
+        StreamListNode* getPrevNode() { return this.prev_node;};
+        void SetPrevNode(StreamListNode* new_prev) { this->prev_node=new_prev;}; // void?
+        StreamListNode* getNextNode() { return this.next_node;};
+        void SetNextNode(StreamListNode* new_next) { this->next_node=new_next;}; // void?
+        AvlTree<Artist*,int>& getNodeAvlTree() {return this.stream_artists;};
+        //ListNode& getNodeFromKey(const Key key);
+
+    };
+
+    StreamListNode* first_node;
+    StreamListNode* last_node;
+    //iterator?
+
+    // Key& // not sure if needed
+    //bool FindKeyAlreadyExists(const Key& key);
+
+
+
+public:
+    StreamList(): first_node(nullptr), last_node(nullptr);
+    ~StreamList();
+    StreamList(const StreamList& list) = delete;
+    StreamList& operator=(const StreamList& list) = delete;
+
+    AvlTree<Artist*,int>& getAvlTreeFromNode(StreamListNode& node) {return node.getNodeAvlTree();};
+
+};
+
+
+
+StreamList::~StreamList(){
+    //write
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -24,9 +145,6 @@ private:
         ListNode* prev_node;
         ListNode* next_node;
 
-        Node(const Element& data,const Key& key):data(data),key(key),right_son(nullptr)
-                ,left_son(nullptr),parent(nullptr),hl(0),hr(0){};
-
         ListNode(Key& key, Element& data): key(key), data(data), prev_node(nullptr),
                 next_node(nullptr){};
         ~ListNode() = default;
@@ -34,7 +152,9 @@ private:
         ListNode& operator=(const ListNode& node) = delete;
 
         ListNode* getPrevNode() { return this.prev_node;};
+        void SetPrevNode(ListNode* new_prev) { this->prev_node=new_prev;}; // void?
         ListNode* getNextNode() { return this.next_node;};
+        void SetNextNode(ListNode* new_next) { this->next_node=new_next;}; // void?
         Element& getNodeData() {return this.data;};
         //ListNode& getNodeFromKey(const Key key);
 
@@ -56,11 +176,13 @@ public:
     List& operator=(const List& node) = delete;
 
 
+    Element& getDataFromNode(ListNode& node) {return node.getNodeData();};
+
 };
 
 
 
-List::~List(){
+List<Element,Key>::~List(){
     //write
 }
 
@@ -69,7 +191,25 @@ List::~List(){
 
 
 
+ListResult List<Element,Key>::insert(const Element &ele, const Key& key) {
+    if(FindKeyAlreadyExists(key)){
+        return NODE_ALREADY_EXISTS;
+    }
+    Node* ptr=new Node(ele,key);
+    if(root== nullptr){
+        root=ptr;
+        root->left_son= nullptr;
+        root->right_son= nullptr;
+        root->parent= nullptr;
+        root->hr=0;
+        root->hl=0;
+        return SUCCESS;
+    }
+    InsertNode(*ptr);
 
+    return SUCCESS;
+
+}
 
 
 
