@@ -6,14 +6,15 @@
 #define WET1_STRUCTS_ARTIST_H
 
 #include "AvlTree.h"
+//#include "List.h"
 
 class Artist{
 private:
     //int artist_id; - probably no need
-    Song* full_songs_list;
-    AvlTree* num_of_streams_tree;
+    StreamListNode** full_songs_list;
+    AvlTree& num_of_streams_tree;
 public:
-    Artist(int id, int num_of_songs);
+    Artist(/*int id*/ int num_of_songs);
     ~Artist();
     Artist(const Artist& a) = delete;
     Artist& operator=(const Artist& a) = delete;
@@ -27,13 +28,15 @@ public:
 
 };
 
-Artist::Artist(int id, int num_of_songs) {
-    artist_id = id;
+Artist::Artist(int num_of_songs) {
+    //artist_id = id;
+
     // allocate space for full_song_list
-    full_songs_list = new Song[num_of_songs];
+    full_songs_list = new StreamListNode*[num_of_songs];
     // create AvlTree for streams_tree
-    num_of_streams_tree = <AvlTree<Song><int>><int>;
-    return this;
+    num_of_streams_tree = AvlTree<AvlTree<int><int>><int>();
+    
+    //return this?
 }
 
 Artist::~Artist(int id, int num_of_songs) {
