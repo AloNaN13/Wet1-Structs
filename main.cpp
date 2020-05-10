@@ -24,16 +24,16 @@ int main() {
    //sari.insert(11,11);
   // sari.remove(1);
 
+    for (int i = 0; i <1000 ; ++i) {
+        printf("%d, \n",i);
+        result=tree.remove(i);
+        assert((result==SUCCESS));
+    }
 
     //assert(sari.insert(1,1)==SUCCESS);
 
 
 
-    printf("still");
 
-
-
-
-
-    return 0;*/
+    return 0;
 }

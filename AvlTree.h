@@ -350,7 +350,7 @@ typename AvlTree<Element,Key>::Node* AvlTree<Element,Key>::removeBinarySearch(No
     Node* parent=node_to_del->parent;
 
 
-    if(parent== nullptr){
+    if(parent== nullptr){//the tree has maximum 2 nodes
         if(node_to_del->right_son!= nullptr){
             node_to_del->right_son->parent= nullptr;
             root=node_to_del->right_son;
@@ -368,11 +368,7 @@ typename AvlTree<Element,Key>::Node* AvlTree<Element,Key>::removeBinarySearch(No
         }
 
     }
-    /*if(parent== nullptr){//the tree has a root and one child only
-        delete (node_to_del);
-        root= nullptr;
-        return nullptr;
-    }*/
+
 
     if(node_to_del->left_son==nullptr&& node_to_del->right_son== nullptr){//its a leaf
         if(parent->right_son==node_to_del){
