@@ -11,13 +11,14 @@
 class Artist{
 private:
     //int artist_id; - probably no need
+    int total_num_of_songs;
     StreamListNode** full_songs_list;
     AvlTree& num_of_streams_tree;
 public:
     Artist(/*int id*/ int num_of_songs);
     ~Artist();
-    Artist(const Artist& a) = delete;
-    Artist& operator=(const Artist& a) = delete;
+    Artist(const Artist& a) = default;
+    Artist& operator=(const Artist& a) = default;
 
     getters-
     int GetArtistID();// Needed?
@@ -32,20 +33,26 @@ Artist::Artist(int num_of_songs) {
     //artist_id = id;
 
     // allocate space for full_song_list
+    total_num_of_songs = num_of_songs;
     full_songs_list = new StreamListNode*[num_of_songs];
+
+    // link all songs the the Node 0 in StreamList - to implement in the AddArtist Func?
+
     // create AvlTree for streams_tree
     num_of_streams_tree = AvlTree<AvlTree<int><int>><int>();
-    
+
     //return this?
 }
 
-Artist::~Artist(int id, int num_of_songs) {
-    artist_id = id;
-    // cut ties to streams_list
-    // delete nodes in AvlTree for streams_tree
-    // delete full_song_list
+Artist::~Artist() {
 
-    return this;
+    // delete full_song_list
+    delete[] full_songs_list;
+
+    // delete nodes in AvlTree for streams_tree - use the destructor?
+
+    // cut ties to streams_list - to implement in the RemoveArtist Func?
+
 }
 
 
