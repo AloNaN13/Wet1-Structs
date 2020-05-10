@@ -30,10 +30,10 @@ private:
 
         StreamListNode(AvlTree<Artist*,int>& stream_artists, int num_of_streams):
             stream_artists(stream_artists), num_of_streams(num_of_streams), prev_node(nullptr),
-            next_node(nullptr){};
+            next_node(nullptr) {};
         ~StreamListNode() = default;
-        StreamListNode(const StreamListNode& node) = delete;
-        StreamListNode& operator=(const StreamListNode& node) = delete;
+        //StreamListNode(const StreamListNode& node) = delete;
+        //StreamListNode& operator=(const StreamListNode& node) = delete;
 
         StreamListNode* getPrevNode() { return this.prev_node;};
         void SetPrevNode(StreamListNode* new_prev) { this->prev_node=new_prev;}; // void?
@@ -54,170 +54,116 @@ private:
 
 
 public:
-    StreamList(): first_node(nullptr), last_node(nullptr);
+    StreamList(): first_node(nullptr), last_node(nullptr) {};
     ~StreamList();
-    StreamList(const StreamList& list) = delete;
-    StreamList& operator=(const StreamList& list) = delete;
+    //StreamList(const StreamList& list) = delete;
+    //StreamList& operator=(const StreamList& list) = delete;
 
     AvlTree<Artist*,int>& getAvlTreeFromNode(StreamListNode& node) {return node.getNodeAvlTree();};
+    AvlTree<Artist*,int>& getAvlTreeFromFirstNode() {return this->first_node.getNodeAvlTree();};
+    AvlTree<Artist*,int>& getAvlTreeFromLastNode() {return this->last_node.getNodeAvlTree();};
+
+
 
 };
 
 
 
 StreamList::~StreamList(){
-    //write
+    // to implement
 }
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-template <class Element,class Key>
-class List{
-private:
-    class ListNode{
-    public:
-        Key& key;
-        Element& data;
-        ListNode* prev_node;
-        ListNode* next_node;
-
-        ListNode(Key& key, Element& data): key(key), data(data), prev_node(nullptr),
-                next_node(nullptr){};
-        ~ListNode() = default;
-        ListNode(const ListNode& node) = delete;
-        ListNode& operator=(const ListNode& node) = delete;
-
-        ListNode* getPrevNode() { return this.prev_node;};
-        void SetPrevNode(ListNode* new_prev) { this->prev_node=new_prev;}; // void?
-        ListNode* getNextNode() { return this.next_node;};
-        void SetNextNode(ListNode* new_next) { this->next_node=new_next;}; // void?
-        Element& getNodeData() {return this.data;};
-        //ListNode& getNodeFromKey(const Key key);
-
-    };
-
-    ListNode* first_node;
-    ListNode* last_node;
-    //iterator?
-
-    // Key& // not sure if needed
-    //bool FindKeyAlreadyExists(const Key& key);
-
-
-
-public:
-    List(): first_node(nullptr), last_node(nullptr);
-    ~List();
-    List(const List& node) = delete;
-    List& operator=(const List& node) = delete;
-
-
-    Element& getDataFromNode(ListNode& node) {return node.getNodeData();};
-
-};
-
-
-
-List<Element,Key>::~List(){
-    //write
-}
-
-
-
-
-
-
-ListResult List<Element,Key>::insert(const Element &ele, const Key& key) {
-    if(FindKeyAlreadyExists(key)){
+ListResult StreamList::insertNode(StreamListNode* curr_node, AvlTree<Artist*,int>& stream_artists, int& num_of_streams) {
+
+    // check if num_of_streams exists?
+    /*
+        if(FindKeyAlreadyExists(key)){
         return NODE_ALREADY_EXISTS;
+     */
+
+    StreamListNode* new_node = new StreamListNode(stream_artists,num_of_streams); // why new?
+
+    // check if the list is empty? probably not, cuz ill make sure there's at least 1 node (0 streams)
+
+    //check the following pointers use
+
+    if(curr_node->next_node != nullptr){
+        *new_node->next_node = curr_node->next_node;
+        *curr_node->next_node->prev_node = new_node;
     }
-    Node* ptr=new Node(ele,key);
-    if(root== nullptr){
-        root=ptr;
-        root->left_son= nullptr;
-        root->right_son= nullptr;
-        root->parent= nullptr;
-        root->hr=0;
-        root->hl=0;
-        return SUCCESS;
-    }
-    InsertNode(*ptr);
+    *new_node->prev_node = curr_node;
+    *curr_node->next_node = new_node;
 
     return SUCCESS;
 
 }
 
 
+ListResult StreamList::removeNode(StreamListNode* node) {
+
+    /*
+    if(!FindKeyAlreadyExists(key)){
+    return  NODE_DOESNT_EXISTS;
+    }
+     */
+
+    //check the following pointers use
+
+    *node->prev_node->next_node = *node->next_node;
+    *node->next_node->prev_node = *node->prev_node;
+
+    delete(node);
+    return SUCCESS;
+
+}
+
+
+
+AvlTreeResult AvlTree<Element,Key>:: remove (const Key& key){
+
+    Node& node_to_del=root->getNodeFromKey(key);
+    Node* parent=removeBinarySearch(&node_to_del);
+    //need toBalance
+
+    if(parent== nullptr){
+        return SUCCESS;
+    }
+
+    while (parent!= nullptr){
+
+        balanceAfterRemove(*parent);
+        parent=parent->parent;
+    }
 
 
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 
 
 typedef struct list* List;
@@ -274,8 +220,7 @@ List listFilter(List list, ElemConditionFunction condition, void* param);
 
 
 
-
-
+*/
 
 
 
