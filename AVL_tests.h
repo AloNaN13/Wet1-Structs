@@ -1,7 +1,7 @@
 //
 // Created by User on 4/29/2020.
 //
-/*
+
 #ifndef WET1_DATASTRUCTS_AVL_TESTS_H
 
 #include <iostream>
@@ -30,7 +30,7 @@ void AVL_TESTS(){
 
 void AVL_Basics(){
     std::cout << "testing general tree insert/remove" << std::endl;
-
+/*
     std::cout << "Starting test 1" << std::endl;
     AVL_test1();
     std::cout << "test 1 successful" << std::endl;
@@ -42,7 +42,7 @@ void AVL_Basics(){
     std::cout << "Starting test 3" << std::endl;
     AVL_test3(10000);
     std::cout << "test 3 successful" << std::endl;
-
+*/
     std::cout << "Starting test 4" << std::endl;
     AVL_test4(10000);
     std::cout << "test 4 successful" << std::endl;
@@ -69,17 +69,18 @@ void AVL_Basics(){
 void AVL_test6() {
     AvlTree<int, int> tree;
     tree.insert(1, 2);
-    tree.get(1) = 5;
-    assert(tree.get(1) == 5);
-    int &elem = tree.get(1);
-    elem = 10;
-    assert(tree.get(1) == 10);
+    *tree.getElementptr(1) = 5;
+    assert(*tree.getElementptr(1) == 5);
+    int *elem = tree.getElementptr(1);
+    *elem = 10;
+    assert(*tree.getElementptr(1) == 10);
 }
 void AVL_test5(int size){
-    AVL<int,int> tree;
+    AvlTree<int,int> tree;
     int *array = new int[size];
     bool *occ = new bool[size];
     for(int i=0;i<size;i++) occ[i]=false;
+    AvlTreeResult result;
 
     for(int i=0;i<size*100;i++){
         int index = rand()%size;
@@ -87,10 +88,12 @@ void AVL_test5(int size){
         if(rand()%2){
             //insert
             if(occ[index]){
-                assert(tree.insert(index,elem)==AVL_KEY_ALREADY_EXISTS);
+                result=tree.insert(elem,index);
+                assert(result==KEY_ALREADY_EXISTS);
             }
             else{
-                assert(tree.insert(index,elem)==AVL_SUCCESS);
+                result=tree.insert(elem,index);
+                assert(result==SUCCESS);
                 array[index]=elem;
                 occ[index]=true;
             }
@@ -98,42 +101,13 @@ void AVL_test5(int size){
         else{
             //remove
             if(occ[index]){
-                assert(tree.removeKey(index)==AVL_SUCCESS);
+                result=tree.remove(index);
+                assert(result==SUCCESS);
                 occ[index]=false;
             }
             else{
-                assert(tree.removeKey(index)==AVL_KEY_DOES_NOT_EXIST);
-            }
-
-        }
-    }
-    for(int i=0;i<size;i++){
-        if(occ[i]){
-            assert(tree.get(i)==array[i]);
-        }
-        else{
-            try {
-                tree.get(i);
-                assert(false);
-            }
-            catch(AVL<int,int>::AVLexception& excep){
-                assert(AVL_KEY_DOES_NOT_EXIST==excep.AVL_what());
-            }
-
-        }
-    }
-    AVL<int,int> cpy = tree;
-    for(int i=0;i<size;i++){
-        if(occ[i]){
-            assert(cpy.get(i)==array[i]);
-        }
-        else{
-            try {
-                cpy.get(i);
-                assert(false);
-            }
-            catch(AVL<int,int>::AVLexception& excep){
-                assert(AVL_KEY_DOES_NOT_EXIST==excep.AVL_what());
+                result=tree.remove(index);
+                assert(result==KEY_DOESNT_EXISTS);
             }
 
         }
@@ -143,18 +117,19 @@ void AVL_test5(int size){
 }
 
 void AVL_test4(int size){
-    AVL<int,double> tree;
+    AvlTree<double,int> tree;
     //insert all
     for(int i=-size*5;i<size*5;i+=5){
-        assert(AVL_SUCCESS == tree.insert(i,double(i)/13));
-        assert(tree.insert(i,double(i))==AVL_KEY_ALREADY_EXISTS);
-        assert(double(i)/13 == tree.get(i));
+        AvlTreeResult result=tree.insert(double(i)/13,i);
+        assert(SUCCESS == result);
+        assert(tree.insert(double(i),i)==KEY_ALREADY_EXISTS);
+        assert(double(i)/13 == *(tree.getElementptr(i)));
     }
-    unsigned int depth = tree.TreeDepthTest();
+    unsigned int depth = tree.getHeight();
     std::cout << "for " << size << " we get a depth of " << depth <<" which is " <<(depth/(log(size)/log(2))) <<" times bigger than the log"<<std::endl;
     assert((depth/(log(size)/log(2)))<3);
 }
-
+/*
 void AVL_test3(int size){
     AvlTree<int,double> tree;
     //insert all
@@ -370,8 +345,7 @@ void AVL_test1(){
     assert(tree.removeKey(4)==AVL_KEY_DOES_NOT_EXIST);
 
 
-}
+}*/
 #define WET1_DATASTRUCTS_AVL_TESTS_H
 
 #endif //WET1_DATASTRUCTS_AVL_TESTS_H
-*/
