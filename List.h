@@ -24,7 +24,7 @@ private:
     class StreamListNode{
     public:
         int num_of_streams;
-        AvlTree<Artist*,int> stream_artists;
+        AvlTree<Artist*,int>& stream_artists;
         StreamListNode* prev_node;
         StreamListNode* next_node;
 
@@ -63,7 +63,8 @@ public:
     AvlTree<Artist*,int>& getAvlTreeFromFirstNode() {return this->first_node.getNodeAvlTree();};
     AvlTree<Artist*,int>& getAvlTreeFromLastNode() {return this->last_node.getNodeAvlTree();};
 
-
+    StreamListNode* getNodePrev(StreamListNode* node) { return *node->getPrevNode();};
+    StreamListNode* getNodeNext(StreamListNode* node) { return *node->getNextNode();};
 
 };
 
@@ -136,7 +137,7 @@ AvlTreeResult AvlTree<Element,Key>:: remove (const Key& key){
         balanceAfterRemove(*parent);
         parent=parent->parent;
     }
-
+}
 
 
 

@@ -16,7 +16,11 @@ typedef StatusType_t{
 
 // DS Class?
 
+
 void * Init(){
+
+    // create AVLTree of Artist
+    // create StreamList with Node 0
 
     return DS;
 }
