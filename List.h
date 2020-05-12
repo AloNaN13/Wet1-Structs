@@ -21,11 +21,11 @@ typedef enum StreamListResult_t{
 class StreamListNode{
 private:
     const int num_of_streams;
-    AvlTree<Artist*,int>& stream_artists;
+    AvlTree<(AvlTree<int,int>)*,int>& stream_artists;
     StreamListNode* prev_node;
     StreamListNode* next_node;
 public:
-    StreamListNode(AvlTree<Artist*,int>& stream_artists, int num_of_streams):
+    StreamListNode(AvlTree<(AvlTree<int,int>)*,int>& stream_artists, int num_of_streams):
             stream_artists(stream_artists), num_of_streams(num_of_streams), prev_node(nullptr),
             next_node(nullptr) {};
     ~StreamListNode() = default;
@@ -37,7 +37,7 @@ public:
     void SetPrevNode(StreamListNode* new_prev) { this->prev_node=new_prev;}; // void?
     StreamListNode* getNextNode() { return this.next_node;};
     void SetNextNode(StreamListNode* new_next) { this->next_node=new_next;}; // void?
-    AvlTree<Artist*,int>& getNodeAvlTree() {return this.stream_artists;};
+    AvlTree<(AvlTree<int,int>)*,int>& getNodeAvlTree() {return this.stream_artists;};
     //ListNode& getNodeFromKey(const Key key);
 
 };
@@ -63,7 +63,7 @@ public:
     //StreamList(const StreamList& list) = delete;
     //StreamList& operator=(const StreamList& list) = delete;
 
-    AvlTree<Artist*,int>& getAvlTreeFromNode(StreamListNode& node) {return node.getNodeAvlTree();};
+    AvlTree<(AvlTree<int,int>)*,int>& getAvlTreeFromNode(StreamListNode& node) {return node.getNodeAvlTree();};
 
     StreamListNode* GetListFirstNode() {return this->first_node;};
     StreamListNode* GetListLastNode() {return this->last_node;};
@@ -72,7 +72,7 @@ public:
     StreamListNode* getNodeNext(StreamListNode* node) { return *node->getNextNode();};
 
 
-    ListResult insertNode(StreamListNode* curr_node, AvlTree<Artist*,int>& stream_artists, int& num_of_streams);
+    ListResult insertNode(StreamListNode* curr_node, AvlTree<(AvlTree<int,int>)*,int>& stream_artists, int& num_of_streams);
     ListResult removeNode(StreamListNode* node);
 
 };
@@ -84,8 +84,8 @@ StreamList::~StreamList(){
 }
 
 
-
-ListResult StreamList::insertNode(StreamListNode* curr_node, AvlTree<Artist*,int>& stream_artists, int& num_of_streams) {
+// inserts after the curr_node
+ListResult StreamList::insertNode(StreamListNode* curr_node, AvlTree<(AvlTree<int,int>)*,int>& stream_artists, int& num_of_streams) {
 
     // check if num_of_streams exists?
     /*

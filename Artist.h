@@ -27,7 +27,7 @@ public:
     int GetArtistID() {return this->artist_id;};
     StreamListNode* GetSongNumOfStreamsNode(int song_id);
     int GetTotalNumOfSongs() {return this->total_num_of_songs;};
-    AvlTree<AvlTree<int><int>><int>& GetNumOfStreamsTree() {return this->num_of_streams_tree;};
+    AvlTree<AvlTree<int><int>,int>& GetNumOfStreamsTree() {return this->num_of_streams_tree;};
     AvlTree<int,int>* getSongsWithNumOfStreams(const Key& key){
         return num_of_streams_tree.getElementptr(key);
     }
@@ -54,7 +54,7 @@ Artist::Artist(int id, int num_of_songs) {
     // link all songs the the Node 0 in StreamList - to implement in the AddArtist Func?
 
     // create AvlTree for streams_tree
-    num_of_streams_tree = AvlTree<AvlTree<int><int>><int>();
+    num_of_streams_tree = AvlTree<AvlTree<int><int>,int>();
 
     //return this?
 }

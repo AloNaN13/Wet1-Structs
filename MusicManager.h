@@ -56,7 +56,7 @@ StatusType AddArtist(void* DS, int artistID, int numOfSongs){
     // check ERRORS
 
     AvlTree<Artist,int>& tree = *((MusicManager*)DS)->GetArtistsTree();
-    Artist& artist_to_add = Artist(numOfSongs);
+    Artist& artist_to_add = Artist(artistID, numOfSongs);
     tree.insert(artist_to_add, artistID);
 
     StreamList& list = *((MusicManager*)DS)->GetListOfStreams();
@@ -79,7 +79,7 @@ StatusType RemoveArtist(void* DS, int artistID){
     // Check ERRORS
 
     AvlTree<Artist,int>& tree = *((MusicManager*)DS)->GetArtistsTree();
-    Artist& artist= *(tree.getElementptr(artistID));
+    Artist& artist = *(tree.getElementptr(artistID));
 
     // COMPLEXITY GOOD ENOUGH? NO NEED TO MAKE NULLS?
     for(int i = 0; i < artist.GetTotalNumOfSongs(); i++){
@@ -108,13 +108,16 @@ StatusType RemoveArtist(void* DS, int artistID){
 StatusType AddToSongCount(void* DS, int artistID, int songID){
     // Check ERRORS
 
+    //get the tree, the artist and the list
     AvlTree<Artist,int>& tree = *((MusicManager*)DS)->GetArtistsTree();
     Artist& artist = *(tree.getElementptr(artistID));
     StreamList& list_of_streams = *((MusicManager*)DS)->GetListOfStreams();
 
+    // get the node in list and its num_of_streams
     StreamListNode* curr_num_node = artist.GetSongNumOfStreamsNode(songID);
-    AvlTree<Artist*,int>  curr_num_node_tree = curr_num_node->getNodeAvlTree();
+    AvlTree<Artist*,int> curr_num_node_tree = curr_num_node->getNodeAvlTree();
     int num = curr_num_node->GetNodeNumOfStreams();
+
     list_of_streams.insertNode(curr_num_node, curr_num_node_tree, num+1);
 
     curr_num_node->SetPrevNode();
