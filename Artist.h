@@ -13,12 +13,12 @@ typedef enum ArtistResult_t{/*WHAT MORE?????*/,SUCCESS,ALLOCATION_ERROR
 
 class Artist{
 private:
-    //int artist_id; - probably no need
+    int artist_id;
     int total_num_of_songs;
     StreamListNode** full_songs_list;
     AvlTree<AvlTree<int><int>><int>& num_of_streams_tree;
 public:
-    Artist(/*int id*/ int num_of_songs);
+    Artist(int id, int num_of_songs);
     ~Artist();
     Artist(const Artist& a) = default;
     Artist& operator=(const Artist& a) = default;
@@ -40,10 +40,11 @@ public:
 
 };
 
-Artist::Artist(int num_of_songs) {
+Artist::Artist(int id, int num_of_songs) {
     //artist_id = id;
 
     // allocate space for full_song_list
+    artist_id = id;
     total_num_of_songs = num_of_songs;
     full_songs_list = new StreamListNode*[num_of_songs];
 

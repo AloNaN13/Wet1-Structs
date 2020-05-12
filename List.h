@@ -71,6 +71,10 @@ public:
     StreamListNode* getNodePrev(StreamListNode* node) { return *node->getPrevNode();};
     StreamListNode* getNodeNext(StreamListNode* node) { return *node->getNextNode();};
 
+
+    ListResult insertNode(StreamListNode* curr_node, AvlTree<Artist*,int>& stream_artists, int& num_of_streams);
+    ListResult removeNode(StreamListNode* node);
+
 };
 
 
@@ -124,26 +128,6 @@ ListResult StreamList::removeNode(StreamListNode* node) {
     return SUCCESS;
 
 }
-
-
-
-AvlTreeResult AvlTree<Element,Key>:: remove (const Key& key){
-
-    Node& node_to_del=root->getNodeFromKey(key);
-    Node* parent=removeBinarySearch(&node_to_del);
-    //need toBalance
-
-    if(parent== nullptr){
-        return SUCCESS;
-    }
-
-    while (parent!= nullptr){
-
-        balanceAfterRemove(*parent);
-        parent=parent->parent;
-    }
-}
-
 
 
 

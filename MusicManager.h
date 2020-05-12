@@ -76,6 +76,8 @@ StatusType AddArtist(void* DS, int artistID, int numOfSongs){
 
 
 StatusType RemoveArtist(void* DS, int artistID){
+    // Check ERRORS
+
     AvlTree<Artist,int>& tree = *((MusicManager*)DS)->GetArtistsTree();
     Artist& artist= *(tree.getElementptr(artistID));
 
@@ -104,7 +106,19 @@ StatusType RemoveArtist(void* DS, int artistID){
 
 
 StatusType AddToSongCount(void* DS, int artistID, int songID){
-    //write
+    // Check ERRORS
+
+    AvlTree<Artist,int>& tree = *((MusicManager*)DS)->GetArtistsTree();
+    Artist& artist = *(tree.getElementptr(artistID));
+    StreamList& list_of_streams = *((MusicManager*)DS)->GetListOfStreams();
+
+    StreamListNode* curr_num_node = artist.GetSongNumOfStreamsNode(songID);
+    AvlTree<Artist*,int>  curr_num_node_tree = curr_num_node->getNodeAvlTree();
+    int num = curr_num_node->GetNodeNumOfStreams();
+    list_of_streams.insertNode(curr_num_node, curr_num_node_tree, num+1);
+
+    curr_num_node->SetPrevNode();
+
 }
 
 
