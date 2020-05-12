@@ -57,15 +57,29 @@ StatusType AddArtist(void* DS, int artistID, int numOfSongs){
 
     AvlTree<Artist,int>& tree = *((MusicManager*)DS)->GetArtistsTree();
     Artist& artist_to_add = Artist(artistID, numOfSongs);
-    tree.insert(artist_to_add, artistID);
-
-    StreamList& list = *((MusicManager*)DS)->GetListOfStreams();
-    StreamListNode* zero_streams_node = GetListFirstNode();
 
     // all songs now point to the zero streams node
     for(int i = 0; i < artist_to_add.GetTotalNumOfSongs(); i++){
         artist_to_add.SetStreamsNumForSong(i, zero_streams_node);
     }
+
+
+    
+
+    tree.insert(artist_to_add, artistID);
+
+    StreamList& list = *((MusicManager*)DS)->GetListOfStreams();
+    StreamListNode* zero_streams_node = GetListFirstNode();
+
+
+    AvlTree<(AvlTree<int,int>)*,int>& node_tree = zero_streams_node->getNodeAvlTree();
+    node_tree.insert(/*THE POINTER TO THE STREAM_NUM*/,artistID);
+
+
+    // insert one node of "0" to the AvlTree of the artist - for NumOfStreams
+    // create AvlTree for all the songs
+        // insert it to the "0" node of NumOfSons
+        // insert nodes to it for all songIDs
 
     return SUCCESS;
 
@@ -84,11 +98,17 @@ StatusType RemoveArtist(void* DS, int artistID){
     // COMPLEXITY GOOD ENOUGH? NO NEED TO MAKE NULLS?
     for(int i = 0; i < artist.GetTotalNumOfSongs(); i++){
         StreamListNode* num_node = artist.GetSongNumOfStreamsNode(i);
-        AvlTree<Artist*,int>& node_tree = num_node->getNodeAvlTree();
+        AvlTree<(AvlTree<int,int>)*,int>& node_tree = num_node->getNodeAvlTree();
         node_tree.remove(artistID);
         artist.SetStreamsNumForSong(i,nullptr);
     }
     tree.remove(artistID);
+
+    // DELETE THE TREE IF NO MORE ARTISTS!
+
+
+
+
 
     // go to songs list
         // for every song
@@ -98,6 +118,7 @@ StatusType RemoveArtist(void* DS, int artistID){
                 // remove the artist by key in the node's AVL Tree
             // change the pointer to NULL
         // delete the artist - remove from tree
+        // delete the node if there are no more artists left
 
 }
 
