@@ -20,7 +20,7 @@ typedef enum StreamListResult_t{
 
 class StreamListNode{
 private:
-    int num_of_streams;
+    const int num_of_streams;
     AvlTree<Artist*,int>& stream_artists;
     StreamListNode* prev_node;
     StreamListNode* next_node;

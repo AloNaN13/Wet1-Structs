@@ -79,7 +79,27 @@ StatusType RemoveArtist(void* DS, int artistID){
     AvlTree<Artist,int>& tree = *((MusicManager*)DS)->GetArtistsTree();
     Artist& artist= *(tree.getElementptr(artistID));
 
-    Artist()
+    // COMPLEXITY GOOD ENOUGH? NO NEED TO MAKE NULLS?
+    for(int i = 0; i < artist.GetTotalNumOfSongs(); i++){
+        StreamListNode* num_node = artist.GetSongNumOfStreamsNode(i);
+        AvlTree<Artist*,int>& node_avl = num_node->getNodeAvlTree();
+        node_avl.remove(artistID);
+
+
+    }
+
+
+
+
+    // go to songs list
+        // for every song
+            // go to the node in the StreamList
+            // if NULL - proceed to next song
+            // remove the artist pointer from each node
+                // find the artist by key in the AVL Tree
+                // remove the node from the avlTree
+            // change the pointer to NULL
+        // delete the artist - remove from tree
 
 }
 
@@ -100,8 +120,9 @@ StatusType NumberOfStreams(void* DS, int artistID, int songID, int* streams){
 
     AvlTree<Artist,int>& tree = *((MusicManager*)DS)->GetArtistsTree();
     Artist& artist= *(tree.getElementptr(artistID));
-    int num = artist.GetSongNumOfStreams(songID);
+    StreamListNode* num_node = artist.GetSongNumOfStreams(songID);
 
+    int num = num_node->GetNodeNumOfStreams();
     *streams = num;
 
     return SUCCESS;
