@@ -8,6 +8,9 @@
 #include "AvlTree.h"
 #include "List.h"
 
+typedef enum ArtistResult_t{/*WHAT MORE?????*/,SUCCESS,ALLOCATION_ERROR
+}ArtistResult;
+
 class Artist{
 private:
     //int artist_id; - probably no need
@@ -23,12 +26,15 @@ public:
     getters-
     // int GetArtistID(); - probably no need
     int GetSongNumOfStreams(int song_id);
+    int GetTotalNumOfSongs() {return this->total_num_of_songs;};
 
 
 
     editors
     // change num_of_streams by uploading 1
-    /ERRORS ChangeStreamsNumForSong(int song_id);
+    // check ERRORS
+
+    ArtistResult SetStreamsNumForSong(int song_id, StreamListNode* wanted_node);
 
 
 
@@ -62,8 +68,15 @@ Artist::~Artist() {
 
 
 int Artist::GetSongNumOfStreams(int song_id) {
-    return *full_songs_list[song_id]->num_of_streams;
+    return *(full_songs_list[song_id])->num_of_streams;
 }
+
+ArtistResult Artist::SetStreamsNumForSong(int song_id, StreamListNode* wanted_node){
+    full_songs_list[song_id] = &wanted_node;
+}
+
+
+
 
 
 

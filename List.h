@@ -61,8 +61,9 @@ public:
     //StreamList& operator=(const StreamList& list) = delete;
 
     AvlTree<Artist*,int>& getAvlTreeFromNode(StreamListNode& node) {return node.getNodeAvlTree();};
-    AvlTree<Artist*,int>& getAvlTreeFromFirstNode() {return this->first_node.getNodeAvlTree();};
-    AvlTree<Artist*,int>& getAvlTreeFromLastNode() {return this->last_node.getNodeAvlTree();};
+
+    StreamListNode* GetListFirstNode() {return this->first_node;};
+    StreamListNode* GetListLastNode() {return this->last_node;};
 
     StreamListNode* getNodePrev(StreamListNode* node) { return *node->getPrevNode();};
     StreamListNode* getNodeNext(StreamListNode* node) { return *node->getNextNode();};

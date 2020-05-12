@@ -51,7 +51,22 @@ void * Init(){
 
 
 StatusType AddArtist(void* DS, int artistID, int numOfSongs){
-    //write
+    // check ERRORS
+
+    AvlTree<Artist,int>& tree = *((MusicManager*)DS)->GetArtistsTree();
+    Artist& artist_to_add = Artist(numOfSongs);
+    tree.insert(artist_to_add, artistID);
+
+    StreamList& list = *((MusicManager*)DS)->GetListOfStreams();
+    StreamListNode* zero_streams_node = GetListFirstNode();
+
+    // all songs now point to the zero streams node
+    for(int i = 0; i < artist_to_add.GetTotalNumOfSongs(); i++){
+        artist_to_add.SetStreamsNumForSong(i, zero_streams_node);
+    }
+
+    return SUCCESS;
+
 }
 
 
