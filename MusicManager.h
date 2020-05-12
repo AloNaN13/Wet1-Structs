@@ -64,6 +64,7 @@ StatusType AddArtist(void* DS, int artistID, int numOfSongs){
     }
 
 
+
     
 
     tree.insert(artist_to_add, artistID);
@@ -79,7 +80,7 @@ StatusType AddArtist(void* DS, int artistID, int numOfSongs){
     // insert one node of "0" to the AvlTree of the artist - for NumOfStreams
     // create AvlTree for all the songs
         // insert it to the "0" node of NumOfSons
-        // insert nodes to it for all songIDs
+        // insert nodes to it for all songIDs - USE AVITAL'S FUNCTION
 
     return SUCCESS;
 

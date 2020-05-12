@@ -66,7 +66,10 @@ public:
     AvlTree<(AvlTree<int,int>)*,int>& getAvlTreeFromNode(StreamListNode& node) {return node.getNodeAvlTree();};
 
     StreamListNode* GetListFirstNode() {return this->first_node;};
+    void SetListFirstNode(StreamListNode* node) {this->first_node = node;}; // void?
     StreamListNode* GetListLastNode() {return this->last_node;};
+    void SetListLastNode(StreamListNode* node) {this->last_node = node;}; // void?
+
 
     StreamListNode* getNodePrev(StreamListNode* node) { return *node->getPrevNode();};
     StreamListNode* getNodeNext(StreamListNode* node) { return *node->getNextNode();};
