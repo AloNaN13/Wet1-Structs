@@ -21,6 +21,7 @@ typedef enum StreamListResult_t{
 
 class StreamList{
 private:
+    // need to get put of the private
     class StreamListNode{
     public:
         int num_of_streams;

@@ -6,7 +6,7 @@
 #define WET1_STRUCTS_ARTIST_H
 
 #include "AvlTree.h"
-//#include "List.h"
+#include "List.h"
 
 class Artist{
 private:
@@ -21,11 +21,16 @@ public:
     Artist& operator=(const Artist& a) = default;
 
     getters-
-    int GetArtistID();// Needed?
-    int GetNumOfStreams
+    // int GetArtistID(); - probably no need
+    int GetSongNumOfStreams(int song_id);
+
+
 
     editors
+    // change num_of_streams by uploading 1
     /ERRORS ChangeStreamsNumForSong(int song_id);
+
+
 
 };
 
@@ -56,10 +61,30 @@ Artist::~Artist() {
 }
 
 
+int Artist::GetSongNumOfStreams(int song_id) {
+    return *full_songs_list[song_id]->num_of_streams;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 class Song{
 private:
     int song_id;
-    /*int**/ num_of_times_streamed; // should point to the list?
+    *int* num_of_times_streamed; // should point to the list?
 public:
     Song();
     ~Song();
@@ -78,7 +103,7 @@ Song::Song() {
 Song::~Song() {
 
 }
-
+*/
 
 
 // what about the list of streams? should I write a new linked list?
