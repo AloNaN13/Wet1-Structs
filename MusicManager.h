@@ -23,6 +23,7 @@ class MusicManager{
 private:
     AvlTree<Artist,int> artists_tree;
     StreamList list_of_streams;
+    int totalNumOfSongs;
 public:
     MusicManager(AvlTree<Artist,int>& artists_tree, StreamList& list_of_streams):
         artists_tree(artists_tree), list_of_streams(list_of_streams);
@@ -46,7 +47,7 @@ void * Init(){
     // create AVLTree of Artist
     // create StreamList with Node 0
 
-    return DS;
+    return new MusicManager;
 }
 
 
@@ -118,7 +119,19 @@ StatusType GetRecommendedSongs(void* DS, int numOfSongs, int* artists, int* song
     DS.getRecommendedSongs( int numOfSongs, int* artists, int* songs);
 }
 
+StatusType MusicManager:: getRecommendedSongs( int numOfSongs, int* artists, int* songs){
+    if(numOfSongs>totalNumOfSongs){
+        return FAILURE;
+    }
+    StreamListNode* current_Node_of_hearings=list_of_streams.GetListLastNode();
+    int count=0;
+    while (count<numOfSongs){//need to get the artist
+        //Artist currentArtist=current_Node_of_hearings;
 
+
+    }
+
+}
 
 
 

@@ -6,31 +6,15 @@
 int main() {
     std::cout << "Hello, World!" << std::endl;
     //AVL_Basics();
-    /*AvlTree <int ,int> sari;
-
-
-    assert(sari.remove(188)==NODE_DOESNT_EXISTS);
-   sari.insert(5,5);
-   sari.insert(8,8);
-   sari.insert(2,2);
-  // sari.insert(10,10);
-  // sari.insert(6,6);
-   sari.insert(4,4);
-   //sari.insert(1,1);
-   //sari.insert(7,7);
-  // sari.insert(9,9);
-   //sari.insert(12,12);
-   sari.insert(3,3);
-   //sari.insert(11,11);
-  // sari.remove(1);
-
-    for (int i = 0; i <1000 ; ++i) {
-        printf("%d, \n",i);
-        result=tree.remove(i);
-        assert((result==SUCCESS));
+    AvlTree <int ,int> sari;
+    for(int i=0;i<1000;i++){
+        sari.insert(i,i);
     }
 
-    //assert(sari.insert(1,1)==SUCCESS);
+    for(int i=0;i<1000;i++){
+        sari.remove(i);
+    }
+    printf("");
 
 
 
