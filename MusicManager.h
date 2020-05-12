@@ -160,20 +160,25 @@ StatusType MusicManager:: getRecommendedSongs( int numOfSongs, int* artists, int
     StreamListNode* current_Node_of_hearings=list_of_streams.GetListLastNode();
     int count=0;;
     Artist* currentArtist;
-    AvlTree<int,int> songs_at_num_streams;
+    AvlTree<int,int>* songs_of_current_artist_with_num_streams;
     int* song;
-    while (count<numOfSongs){//need to get the artist
+    int current_ArtistId;
+    while (count<numOfSongs){
         int numStreams=0;
-        AvlTree<Artist*,int> currentNumHearings=current_Node_of_hearings->getNodeAvlTree();
-        currentArtist=*(currentNumHearings.getFirst());
-        while (count<numOfSongs&& currentArtist!=nullptr){
-            songs_at_num_streams=currentArtist->getSongsWithNumOfStreams();
-            song=songs_at_num_streams.getFirst();
-            //artistID
-            while (song!= nullptr &&count<numOfSongs){
+        songs_of_current_artist_with_num_streams=(current_Node_of_hearings->getNodeAvlTree()).getFirst();
 
+        while (count<numOfSongs &&songs_of_current_artist_with_num_streams){
+            song=songs_of_current_artist_with_num_streams->getFirst();
+            current_ArtistId=(current_Node_of_hearings->getNodeAvlTree()).getKey();
+            while (song &&count<numOfSongs){
+                artists[count]=current_ArtistId;
+                songs[count]=(current_Node_of_hearings->getNodeAvlTree()).getKey();
+
+                count++;
+                song=songs_of_current_artist_with_num_streams->getNext();
             }
-            currentArtist=*(currentNumHearings.getNext());
+
+            songs_of_current_artist_with_num_streams=(current_Node_of_hearings->getNodeAvlTree()).getNext();
         }
 
     }
