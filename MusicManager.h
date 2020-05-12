@@ -155,10 +155,23 @@ StatusType MusicManager:: getRecommendedSongs( int numOfSongs, int* artists, int
         return FAILURE;
     }
     StreamListNode* current_Node_of_hearings=list_of_streams.GetListLastNode();
-    int count=0;
+    int count=0;;
+    Artist* currentArtist;
+    AvlTree<int,int> songs_at_num_streams;
+    int* song;
     while (count<numOfSongs){//need to get the artist
-        //Artist currentArtist=current_Node_of_hearings;
+        int numStreams=0;
+        AvlTree<Artist*,int> currentNumHearings=current_Node_of_hearings->getNodeAvlTree();
+        currentArtist=*(currentNumHearings.getFirst());
+        while (count<numOfSongs&& currentArtist!=nullptr){
+            songs_at_num_streams=currentArtist->getSongsWithNumOfStreams();
+            song=songs_at_num_streams.getFirst();
+            //artistID
+            while (song!= nullptr &&count<numOfSongs){
 
+            }
+            currentArtist=*(currentNumHearings.getNext());
+        }
 
     }
 

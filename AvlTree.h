@@ -7,8 +7,8 @@
 #ifndef MIVNE_AVLTREE_H
 #define MIVNE_AVLTREE_H
 
-typedef enum AvlTreeResult_t{KEY_ALREADY_EXISTS,SUCCESS,ALLOCATION_ERROR
-,KEY_DOESNT_EXISTS
+typedef enum AvlTreeResult_t{AVL_KEY_ALREADY_EXISTS,AVL_SUCCESS,AVL_ALLOCATION_ERROR
+,AVL_KEY_DOESNT_EXISTS
 }AvlTreeResult;
 
 template <class Element,class Key>
@@ -620,7 +620,7 @@ bool AvlTree<Element,Key>::findKeyAlreadyExists(const Key& key){
 template <class Element,class Key>
 AvlTreeResult AvlTree<Element,Key>::insert(const Element &ele, const Key& key) {
     if(findKeyAlreadyExists(key)){
-        return  KEY_ALREADY_EXISTS;
+        return  AVL_KEY_ALREADY_EXISTS;
     }
     Node* ptr=new Node(ele,key);
     if(root== nullptr){
@@ -630,25 +630,25 @@ AvlTreeResult AvlTree<Element,Key>::insert(const Element &ele, const Key& key) {
         root->parent= nullptr;
         root->hr=0;
         root->hl=0;
-        return SUCCESS;
+        return AVL_SUCCESS;
     }
     InsertNode(*ptr);
 
-    return SUCCESS;
+    return AVL_SUCCESS;
 
 }
 
 template <class Element,class Key>
 AvlTreeResult AvlTree<Element,Key>:: remove (const Key& key){
     if(!findKeyAlreadyExists(key)){
-        return  KEY_DOESNT_EXISTS;
+        return  AVL_KEY_DOESNT_EXISTS;
     }
     Node& node_to_del=root->getNodeFromKey(key);
     Node* parent=removeBinarySearch(&node_to_del);
     //need toBalance
 
     if(parent== nullptr){
-        return SUCCESS;
+        return AVL_SUCCESS;
     }
 
     while (parent!= nullptr){
@@ -656,7 +656,7 @@ AvlTreeResult AvlTree<Element,Key>:: remove (const Key& key){
         balanceAfterRemove(*parent);
         parent=parent->parent;
     }
-    return SUCCESS;
+    return AVL_SUCCESS;
 }
 
 #endif //MIVNE_AVLTREE_H

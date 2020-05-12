@@ -2,6 +2,7 @@
 #include "AvlTree.h"
 #include <cassert>
 #include "AVL_tests.h"
+#include "Artist.h"
 
 int main() {
     std::cout << "Hello, World!" << std::endl;
