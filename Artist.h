@@ -23,8 +23,8 @@ public:
     Artist(const Artist& a) = default;
     Artist& operator=(const Artist& a) = default;
 
-    getters-
-    // int GetArtistID(); - probably no need
+    //getters-
+    int GetArtistID() {return this->artist_id;};
     StreamListNode* GetSongNumOfStreamsNode(int song_id);
     int GetTotalNumOfSongs() {return this->total_num_of_songs;};
     AvlTree<AvlTree<int><int>><int>& GetNumOfStreamsTree() {return this->num_of_streams_tree;};
@@ -33,7 +33,7 @@ public:
     }
 
 
-    editors
+    //editors
     // change num_of_streams by uploading 1
     // check ERRORS
 
