@@ -32,6 +32,7 @@ public:
     //StreamListNode(const StreamListNode& node) = delete;
     //StreamListNode& operator=(const StreamListNode& node) = delete;
 
+    int GetNodeNumOfStreams() {return this->num_of_streams;};
     StreamListNode* getPrevNode() { return this.prev_node;};
     void SetPrevNode(StreamListNode* new_prev) { this->prev_node=new_prev;}; // void?
     StreamListNode* getNextNode() { return this.next_node;};
