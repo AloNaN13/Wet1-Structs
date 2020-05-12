@@ -89,11 +89,11 @@ void AVL_test5(int size){
             //insert
             if(occ[index]){
                 result=tree.insert(elem,index);
-                assert(result==KEY_ALREADY_EXISTS);
+                assert(result==AVL_KEY_ALREADY_EXISTS);
             }
             else{
                 result=tree.insert(elem,index);
-                assert(result==SUCCESS);
+                assert(result==AVL_SUCCESS);
                 array[index]=elem;
                 occ[index]=true;
             }
@@ -102,12 +102,12 @@ void AVL_test5(int size){
             //remove
             if(occ[index]){
                 result=tree.remove(index);
-                assert(result==SUCCESS);
+                assert(result==AVL_SUCCESS);
                 occ[index]=false;
             }
             else{
                 result=tree.remove(index);
-                assert(result==KEY_DOESNT_EXISTS);
+                assert(result==AVL_KEY_DOESNT_EXISTS);
             }
 
         }
@@ -121,8 +121,8 @@ void AVL_test4(int size){
     //insert all
     for(int i=-size*5;i<size*5;i+=5){
         AvlTreeResult result=tree.insert(double(i)/13,i);
-        assert(SUCCESS == result);
-        assert(tree.insert(double(i),i)==KEY_ALREADY_EXISTS);
+        assert(AVL_SUCCESS == result);
+        assert(tree.insert(double(i),i)==AVL_KEY_ALREADY_EXISTS);
         assert(double(i)/13 == *(tree.getElementptr(i)));
     }
     unsigned int depth = tree.getHeight();
