@@ -116,7 +116,6 @@ StatusType GetRecommendedSongs(void* DS, int numOfSongs, int* artists, int* song
         return INVALID_INPUT;
     }
     DS.getRecommendedSongs( int numOfSongs, int* artists, int* songs);
-
 }
 
 

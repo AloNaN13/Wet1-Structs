@@ -18,32 +18,35 @@ typedef enum StreamListResult_t{
 
 
 
+class StreamListNode{
+private:
+    int num_of_streams;
+    AvlTree<Artist*,int>& stream_artists;
+    StreamListNode* prev_node;
+    StreamListNode* next_node;
+public:
+    StreamListNode(AvlTree<Artist*,int>& stream_artists, int num_of_streams):
+            stream_artists(stream_artists), num_of_streams(num_of_streams), prev_node(nullptr),
+            next_node(nullptr) {};
+    ~StreamListNode() = default;
+    //StreamListNode(const StreamListNode& node) = delete;
+    //StreamListNode& operator=(const StreamListNode& node) = delete;
+
+    StreamListNode* getPrevNode() { return this.prev_node;};
+    void SetPrevNode(StreamListNode* new_prev) { this->prev_node=new_prev;}; // void?
+    StreamListNode* getNextNode() { return this.next_node;};
+    void SetNextNode(StreamListNode* new_next) { this->next_node=new_next;}; // void?
+    AvlTree<Artist*,int>& getNodeAvlTree() {return this.stream_artists;};
+    //ListNode& getNodeFromKey(const Key key);
+
+};
+
+
 
 class StreamList{
 private:
     // need to get put of the private
-    class StreamListNode{
-    public:
-        int num_of_streams;
-        AvlTree<Artist*,int>& stream_artists;
-        StreamListNode* prev_node;
-        StreamListNode* next_node;
-
-        StreamListNode(AvlTree<Artist*,int>& stream_artists, int num_of_streams):
-            stream_artists(stream_artists), num_of_streams(num_of_streams), prev_node(nullptr),
-            next_node(nullptr) {};
-        ~StreamListNode() = default;
-        //StreamListNode(const StreamListNode& node) = delete;
-        //StreamListNode& operator=(const StreamListNode& node) = delete;
-
-        StreamListNode* getPrevNode() { return this.prev_node;};
-        void SetPrevNode(StreamListNode* new_prev) { this->prev_node=new_prev;}; // void?
-        StreamListNode* getNextNode() { return this.next_node;};
-        void SetNextNode(StreamListNode* new_next) { this->next_node=new_next;}; // void?
-        AvlTree<Artist*,int>& getNodeAvlTree() {return this.stream_artists;};
-        //ListNode& getNodeFromKey(const Key key);
-
-    };
+    // put the StreamListNode back?
 
     StreamListNode* first_node;
     StreamListNode* last_node;
@@ -51,7 +54,6 @@ private:
 
     // Key& // not sure if needed
     //bool FindKeyAlreadyExists(const Key& key);
-
 
 
 public:
