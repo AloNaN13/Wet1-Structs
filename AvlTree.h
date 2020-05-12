@@ -40,8 +40,10 @@ private:
     };
 
 
+
     Node* root;
     Node* iterator;
+    Node* first;
     void swapNodes(Node *node_to_del,Node* next_by_value);
     bool findKeyAlreadyExists(const Key& key);
     Node* removeBinarySearch(Node* node_to_del);
@@ -55,8 +57,9 @@ private:
     void fixHeightAfterRemove(Node* parent_of_removed);
     void fixHeightAfterRotation(Node* rotated_node);
 
+
 public:
-    AvlTree():root(nullptr),iterator(nullptr){};
+    AvlTree():root(nullptr),iterator(nullptr),first(nullptr){};
     ~AvlTree();
     AvlTree& operator=(const AvlTree&)= default;
     AvlTreeResult insert (const Element& ele, const Key& key);
@@ -65,6 +68,9 @@ public:
     Element* getElementptr(const Key& key);
     Element* getFirst();
     Element* getNext();
+    const Key& getKey(){
+        return iterator->key;
+    }
 
 
 };
@@ -76,10 +82,7 @@ Element* AvlTree<Element,Key>::getFirst() {
     if(root== nullptr){
         return nullptr;
     }
-    iterator=root;
-    while (iterator->left_son){
-        iterator=iterator->left_son;
-    }
+    iterator=first;
     return &iterator->data;
 }
 
@@ -630,9 +633,13 @@ AvlTreeResult AvlTree<Element,Key>::insert(const Element &ele, const Key& key) {
         root->parent= nullptr;
         root->hr=0;
         root->hl=0;
+        first=root;
         return AVL_SUCCESS;
     }
     InsertNode(*ptr);
+    if(key<first->key){
+        first=ptr;
+    }
 
     return AVL_SUCCESS;
 
@@ -644,7 +651,9 @@ AvlTreeResult AvlTree<Element,Key>:: remove (const Key& key){
         return  AVL_KEY_DOESNT_EXISTS;
     }
     Node& node_to_del=root->getNodeFromKey(key);
+    bool setFirst=(&node_to_del==first);
     Node* parent=removeBinarySearch(&node_to_del);
+
     //need toBalance
 
     if(parent== nullptr){
@@ -655,6 +664,12 @@ AvlTreeResult AvlTree<Element,Key>:: remove (const Key& key){
 
         balanceAfterRemove(*parent);
         parent=parent->parent;
+    }
+    if(setFirst){
+        first=root;
+        while (first &&first->left_son){
+            first=first->left_son;
+        }
     }
     return AVL_SUCCESS;
 }

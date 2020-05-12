@@ -1,8 +1,7 @@
 #include <iostream>
 #include "AvlTree.h"
 #include <cassert>
-#include "AVL_tests.h"
-#include "Artist.h"
+
 
 int main() {
     std::cout << "Hello, World!" << std::endl;
@@ -12,7 +11,7 @@ int main() {
         sari.insert(i,i);
     }
 
-    for(int i=0;i<1000;i++){
+    for(int i=0;i<500;i++){
         sari.remove(i);
     }
     printf("");
