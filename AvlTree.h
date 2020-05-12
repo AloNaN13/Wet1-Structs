@@ -41,6 +41,7 @@ private:
 
 
     Node* root;
+    Node* iterator;
     void swapNodes(Node *node_to_del,Node* next_by_value);
     bool findKeyAlreadyExists(const Key& key);
     Node* removeBinarySearch(Node* node_to_del);
@@ -55,16 +56,57 @@ private:
     void fixHeightAfterRotation(Node* rotated_node);
 
 public:
-    AvlTree():root(nullptr){};
+    AvlTree():root(nullptr),iterator(nullptr){};
     ~AvlTree();
     AvlTree& operator=(const AvlTree&)= default;
     AvlTreeResult insert (const Element& ele, const Key& key);
     AvlTreeResult remove (const Key& key);
     int getHeight(){ return root->getHeight();};
     Element* getElementptr(const Key& key);
+    Element* getFirst();
+    Element* getNext();
 
 
 };
+
+
+
+template <class Element,class Key>
+Element* AvlTree<Element,Key>::getFirst() {
+    if(root== nullptr){
+        return nullptr;
+    }
+    iterator=root;
+    while (iterator->left_son){
+        iterator=iterator->left_son;
+    }
+    return &iterator->data;
+}
+
+//returns null ptr if iterator is null or iterator is on the largest node in the tree
+template <class Element,class Key>
+Element* AvlTree<Element,Key>::getNext() {
+    if(iterator== nullptr){
+        return nullptr;
+    }
+    if(iterator->right_son){
+        iterator=iterator->right_son;
+        while (iterator->left_son){
+            iterator=iterator->left_son;
+        }
+        return &iterator->data;
+    }
+    while (iterator->parent &&iterator->parent->right_son==iterator){
+        iterator=iterator->parent;
+    }
+    if(iterator->parent== nullptr){
+        iterator=iterator->parent;
+        return nullptr;
+    }
+    iterator=iterator->parent;
+    return &iterator->data;
+
+}
 
 
 template <class Element,class Key>

@@ -10,7 +10,7 @@
 #include "Artist.h"
 
 // should these enums be exceptions?
-typedef StatusType_t{
+typedef enum StatusType_t{
     ALLOCATION_ERROR,
     INVALID_INPUT,
     FAILURE,
@@ -33,6 +33,7 @@ public:
     //methods
     StreamList& GetListOfStreams() {return this->list_of_streams;};
     AvlTree<Artist,int>& GetArtistsTree() {return this->artists_tree;};
+    StatusType getRecommendedSongs( int numOfSongs, int* artists, int* songs);
 
 };
 
@@ -107,7 +108,11 @@ StatusType NumberOfStreams(void* DS, int artistID, int songID, int* streams){
 
 
 StatusType GetRecommendedSongs(void* DS, int numOfSongs, int* artists, int* songs){
-    //write
+    if(DS== nullptr || numOfSongs<=0){
+        return INVALID_INPUT;
+    }
+    DS.getRecommendedSongs( int numOfSongs, int* artists, int* songs);
+
 }
 
 
