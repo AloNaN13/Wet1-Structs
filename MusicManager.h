@@ -11,10 +11,10 @@
 
 // should these enums be exceptions?
 typedef enum StatusType_t{
-    ALLOCATION_ERROR,
-    INVALID_INPUT,
-    FAILURE,
-    SUCCESS
+    MM_ALLOCATION_ERROR,
+    MM_INVALID_INPUT,
+    MM_FAILURE,
+    MM_SUCCESS
 }StatusType;
 
 
@@ -49,7 +49,7 @@ MusicManager::  MusicManager(AvlTree<Artist,int>& artists_tree, StreamList& list
     //            stream_artists(stream_artists), num_of_streams(num_of_streams), prev_node(nullptr),
    // ListResult insertNode(StreamListNode* curr_node, AvlTree<(AvlTree<int,int>)*,int>& stream_artists, int& num_of_streams);
 }
-MusicManager::~MusicManager(){
+MusicManager:: ~MusicManager(){
 
     delete artists_tree;
     delete list_of_streams;
@@ -71,7 +71,14 @@ void * Init(){
 StatusType AddArtist(void* DS, int artistID, int numOfSongs){
     // check ERRORS
 
+    if(artistID<=0 || DS == nullptr || numOfSongs <=0){
+        return MM_INVALID_INPUT;
+    }
+
     AvlTree<Artist,int>& tree = *((MusicManager*)DS)->GetArtistsTree();
+    if(tree.findKeyAlreadyExists(artistID)){
+        return MM_FAILURE;
+    }
     Artist& artist_to_add = Artist(artistID, numOfSongs);
 
 
@@ -89,7 +96,7 @@ StatusType AddArtist(void* DS, int artistID, int numOfSongs){
     AvlTree<(AvlTree<int,int>)*,int>& node_tree = zero_streams_node->getNodeAvlTree();
     node_tree.insert((&(*(tree.getElementptr(artistID))->GetNumOfStreamsTree())),artistID);
     
-    return SUCCESS;
+    return MM_SUCCESS;
 
 }
 
@@ -100,7 +107,14 @@ StatusType AddArtist(void* DS, int artistID, int numOfSongs){
 StatusType RemoveArtist(void* DS, int artistID){
     // Check ERRORS
 
+    if(artistID<=0 || DS == nullptr){
+        return MM_INVALID_INPUT;
+    }
+
     AvlTree<Artist,int>& tree = *((MusicManager*)DS)->GetArtistsTree();
+    if(!(tree.findKeyAlreadyExists(artistID))){
+        return MM_FAILURE;
+    }
     Artist& artist = *(tree.getElementptr(artistID));
 
     // COMPLEXITY GOOD ENOUGH? NO NEED TO MAKE NULLS?
@@ -116,6 +130,8 @@ StatusType RemoveArtist(void* DS, int artistID){
         artist.SetStreamsNumForSong(i,nullptr);
     }
     tree.remove(artistID);
+
+    return MM_SUCCESS;
 
     // go to songs list
         // for every song
@@ -136,9 +152,20 @@ StatusType RemoveArtist(void* DS, int artistID){
 StatusType AddToSongCount(void* DS, int artistID, int songID){
     // Check ERRORS
 
-    //get the tree, the artist and the list
+    if(artistID<=0 || DS == nullptr || songID<0){
+        return MM_INVALID_INPUT;
+    }
+
     AvlTree<Artist,int>& tree = *((MusicManager*)DS)->GetArtistsTree();
+    if(tree.findKeyAlreadyExists(artistID)){
+        return MM_FAILURE;
+    }
+
+    //get the tree, the artist and the list
     Artist& artist = *(tree.getElementptr(artistID));
+    if(artist.GetTotalNumOfSongs()<=songID){
+        return MM_INVALID_INPUT;
+    }
     StreamList& list_of_streams = *((MusicManager*)DS)->GetListOfStreams();
     AvlTree<int,int>* node_to_point_to = nullptr;
     StreamListNode* stream_list_node_to_point_to = nullptr;
@@ -213,7 +240,7 @@ StatusType AddToSongCount(void* DS, int artistID, int songID){
     // change in the songs array
     artist.SetStreamsNumForSong(songID,stream_list_node_to_point_to);
 
-
+    return MM_SUCCESS;
 
 
     //get the tree, the artist and the list
@@ -260,14 +287,25 @@ StatusType AddToSongCount(void* DS, int artistID, int songID){
 StatusType NumberOfStreams(void* DS, int artistID, int songID, int* streams){
     // return ERRORS
 
+    if(artistID<=0 || DS == nullptr || numOfSongs <0){
+        return MM_INVALID_INPUT;
+    }
+
     AvlTree<Artist,int>& tree = *((MusicManager*)DS)->GetArtistsTree();
+    if(tree.findKeyAlreadyExists(artistID)){
+        return MM_FAILURE;
+    }
+
     Artist& artist= *(tree.getElementptr(artistID));
+    if(artist.GetTotalNumOfSongs()<=songID){
+        return MM_INVALID_INPUT;
+    }
     StreamListNode* num_node = artist.GetSongNumOfStreams(songID);
 
     int num = num_node->GetNodeNumOfStreams();
     *streams = num;
 
-    return SUCCESS;
+    return MM_SUCCESS;
 
 }
 
@@ -277,14 +315,14 @@ StatusType NumberOfStreams(void* DS, int artistID, int songID, int* streams){
 
 StatusType GetRecommendedSongs(void* DS, int numOfSongs, int* artists, int* songs){
     if(DS== nullptr || numOfSongs<=0){
-        return INVALID_INPUT;
+        return MM_INVALID_INPUT;
     }
     DS.getRecommendedSongs( int numOfSongs, int* artists, int* songs);
 }
 
 StatusType MusicManager:: getRecommendedSongs( int numOfSongs, int* artists, int* songs){
     if(numOfSongs>totalNumOfSongs){
-        return FAILURE;
+        return MM_FAILURE;
     }
     StreamListNode* current_Node_of_hearings=list_of_streams.GetListLastNode();
     int count=0;;
