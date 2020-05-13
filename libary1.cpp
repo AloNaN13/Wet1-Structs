@@ -74,6 +74,7 @@ StatusType GetRecommendedSongs(void* DS, int numOfSongs, int* artists, int* song
 }
 
 StatusType quit(void**DS ){
-
+    delete ((MusicManager*)(*DS));
+    *DS= nullptr;
 }
 

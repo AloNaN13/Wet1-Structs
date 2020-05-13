@@ -10,10 +10,10 @@
 #include "Artist.h"
 
 typedef enum StreamListResult_t{
-    SUCCESS,
-    ALLOCATION_ERROR,
-    NODE_ALREADY_EXISTS,
-    NODE_DOESNT_EXISTS
+    SL_SUCCESS,
+    SL_ALLOCATION_ERROR,
+    SL_NODE_ALREADY_EXISTS,
+    SL_NODE_DOESNT_EXISTS
 }StreamListResult;
 
 
@@ -37,7 +37,7 @@ public:
     void SetPrevNode(StreamListNode* new_prev) { this->prev_node=new_prev;}; // void?
     StreamListNode* getNextNode() { return this.next_node;};
     void SetNextNode(StreamListNode* new_next) { this->next_node=new_next;}; // void?
-    AvlTree<(AvlTree<int,int>)*,int>& getNodeAvlTree() {return this.stream_artists;};
+    AvlTree<AvlTree<int,int>*,int>& getNodeAvlTree() {return this.stream_artists;};
     //ListNode& getNodeFromKey(const Key key);
 
 };

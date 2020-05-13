@@ -8,8 +8,6 @@
 #include "AvlTree.h"
 #include "List.h"
 
-typedef enum ArtistResult_t{/*WHAT MORE?????*/SUCCESS,ALLOCATION_ERROR
-}ArtistResult;
 
 class Artist{
 private:
