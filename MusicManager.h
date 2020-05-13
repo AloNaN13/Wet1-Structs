@@ -25,8 +25,7 @@ private:
     StreamList list_of_streams;
     int totalNumOfSongs;
 public:
-    MusicManager(AvlTree<Artist,int>& artists_tree, StreamList& list_of_streams):
-        artists_tree(artists_tree), list_of_streams(list_of_streams);
+    MusicManager():artists_tree(artists_tree), list_of_streams(list_of_streams),totalNumOfSongs(0){};
     ~MusicManager();
     MusicManager(const MusicManager& music_manager) = default;
     MusicManager& operator=(const MusicManager& music_manager) = default;
@@ -50,9 +49,9 @@ MusicManager::  MusicManager(AvlTree<Artist,int>& artists_tree, StreamList& list
     //            stream_artists(stream_artists), num_of_streams(num_of_streams), prev_node(nullptr),
    // ListResult insertNode(StreamListNode* curr_node, AvlTree<(AvlTree<int,int>)*,int>& stream_artists, int& num_of_streams);
 }
-MusicManager::  ~MusicManager(){
+MusicManager::~MusicManager(){
 
-    delete (artists_tree);
+    delete artists_tree;
     delete list_of_streams;
 }
 
@@ -312,6 +311,7 @@ StatusType MusicManager:: getRecommendedSongs( int numOfSongs, int* artists, int
         }
         current_Node_of_hearings=current_Node_of_hearings->getNextNode();
     }
+    return SUCCESS;
 
 }
 
@@ -321,7 +321,7 @@ StatusType MusicManager:: getRecommendedSongs( int numOfSongs, int* artists, int
 // check if that is the way to use DELETE
 void Quit(void** DS){
 
-    delete ((*MusicManager)(**DS));
+    delete ((*MusicManager)(*DS));
     *DS= nullptr;
 
     //delete for all init "new"s?
