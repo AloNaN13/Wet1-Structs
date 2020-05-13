@@ -61,28 +61,18 @@ StatusType AddArtist(void* DS, int artistID, int numOfSongs){
 
     StreamList& list = *((MusicManager*)DS)->GetListOfStreams();
     StreamListNode* zero_streams_node = GetListFirstNode();
-
-    // all songs now point to the zero streams node
+    // all songs now point to the "0" streams node
     for(int i = 0; i < artist_to_add.GetTotalNumOfSongs(); i++){
         artist_to_add.SetStreamsNumForSong(i, zero_streams_node);
     }
 
-    AvlTree<AvlTree<int,int>,int>& streams_tree = artist_to_add.GetNumOfStreamsTree();
-    AvlTree<int,int>& songs_tree = AvlTree<int,int>();
-    //USE AVITAL's FUNCTION TO INSERT ALL SONGS AS NODES TO streams_tree - as "0"
-        // .insert(streams_tree,0);
-
+    // insert artist into songs
     tree.insert(artist_to_add, artistID);
 
+    // insert pointer to the artist in "0" node AVLTree
     AvlTree<(AvlTree<int,int>)*,int>& node_tree = zero_streams_node->getNodeAvlTree();
     node_tree.insert((&(*(tree.getElementptr(artistID))->GetNumOfStreamsTree())),artistID);
-
-
-    // insert one node of "0" to the AvlTree of the artist - for NumOfStreams
-    // create AvlTree for all the songs
-        // insert it to the "0" node of NumOfSons
-        // insert nodes to it for all songIDs - USE AVITAL'S FUNCTION
-
+    
     return SUCCESS;
 
 }

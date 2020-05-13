@@ -44,19 +44,26 @@ public:
 };
 
 Artist::Artist(int id, int num_of_songs) {
-    //artist_id = id;
 
-    // allocate space for full_song_list
     artist_id = id;
     total_num_of_songs = num_of_songs;
-    full_songs_list = new StreamListNode*[num_of_songs];
+    // allocate space for full_song_list
+    full_songs_list = *(new StreamListNode*[num_of_songs]);
 
     // link all songs the the Node 0 in StreamList - to implement in the AddArtist Func?
 
-    // create AvlTree for streams_tree
-    num_of_streams_tree = new AvlTree<AvlTree<int,int>,int>();
+    //create the songs tree - create an array, insert it, delete it
+    int songs_arr[num_of_songs];
+    for(int i = 0; i < num_of_songs; i++){
+        songs_arr[i] = i;
+    }
+    AvlTree<int,int>& songs_tree = AvlTree(songs_arr, songs_arr, num_of_songs);
+    delete[] songs_arr;
 
-    //return this?
+    // create AvlTree for streams_tree - with first node "0" for all the songs
+    num_of_streams_tree = *(new AvlTree<AvlTree<int,int>,int>());
+    num_of_streams_tree.insert(songs_tree,0);
+
 }
 
 Artist::~Artist() {
