@@ -148,6 +148,17 @@ StatusType AddToSongCount(void* DS, int artistID, int songID){
         num_of_streams_tree.remove(songs_num_of_streams);
     }
     // insert song to the next num_of_streams node
+    if(num_of_streams_tree.findKeyAlreadyExists(songs_num_of_streams+1)){
+        *(num_of_streams_tree.getElementptr(songs_num_of_streams+1))->insert(songID,songID);
+    }
+    else if{
+        AvlTree<int,int>& new_songs_tree = AvlTree<int,int>();
+        new_songs_tree.insert(songID,songID);
+        num_of_streams_tree.insert(new_songs_tree,songs_num_of_streams+1);
+        node_to_point_to = num_of_streams_tree.getElementptr(songs_num_of_streams+1);
+    }
+
+    /* OLD CODE
     AvlTree<int,int>& num_of_streams_tree_next_node = *(num_of_streams_tree.getNext()) // HOW TO USE GetNext?
     if(num_of_streams_tree_next_node.getKey() == ) {         // HOW TO USE GetKey?
         // get the next num_of_streams node
@@ -161,6 +172,14 @@ StatusType AddToSongCount(void* DS, int artistID, int songID){
         num_of_streams_tree.insert(new_songs_tree, songs_num_of_streams+1);
         node_to_point_to = num_of_streams_tree.getElementptr(songs_num_of_streams+1);
     }
+
+     */
+
+
+
+
+
+
 
     // change in the List
     StreamListNode* num_of_streams_list_next_node = num_of_streams_list_node->getNextNode();
@@ -207,12 +226,17 @@ StatusType AddToSongCount(void* DS, int artistID, int songID){
     // change in the List
         // get the node in the StreamList from the songs array
         // get the node's AVLTree
-        // get the next StreamListNode
-            // check if +1
-                // if yes - add the artist to it - pointer to the new "num_of_streams" node
-                // if no
-                    // add a new +1 node to the StreamList
-                    // add the artist to the node's tree - pointer the the new "num_of_streams" node
+        // check if next exists
+            // if yes - get the pointer to the element (the tree)
+            // if no - create one and add
+// OLD PART
+            // get the next StreamListNode
+                // check if +1
+                    // if yes - add the artist to it - pointer to the new "num_of_streams" node
+                    // if no
+                        // add a new +1 node to the StreamList
+                        // add the artist to the node's tree - pointer the the new "num_of_streams" node
+// END OF OLD PART
         // remove the artist's node from the tree
             // check if it wasn't the first node
                 // check if it was the only song in the tree

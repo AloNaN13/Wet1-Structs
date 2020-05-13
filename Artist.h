@@ -54,7 +54,7 @@ Artist::Artist(int id, int num_of_songs) {
     // link all songs the the Node 0 in StreamList - to implement in the AddArtist Func?
 
     // create AvlTree for streams_tree
-    num_of_streams_tree = AvlTree<AvlTree<int,int>,int>();
+    num_of_streams_tree = new AvlTree<AvlTree<int,int>,int>();
 
     //return this?
 }
@@ -63,10 +63,8 @@ Artist::~Artist() {
 
     // delete full_song_list
     delete[] full_songs_list;
-
     // delete nodes in AvlTree for streams_tree - use the destructor?
-
-    // cut ties to streams_list - to implement in the RemoveArtist Func?
+    delete[] num_of_streams_tree;
 
 }
 
