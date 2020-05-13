@@ -47,7 +47,7 @@ private:
     Node* iterator;
     Node* first;
     void swapNodes(Node *node_to_del,Node* next_by_value);
-    bool findKeyAlreadyExists(const Key& key);
+
     Node* removeBinarySearch(Node* node_to_del);
     void InsertNode(Node &newNode);
     void deleteAllNodes(Node* node);
@@ -75,6 +75,7 @@ public:
     const Key& getKey(){
         return iterator->key;
     }
+    bool findKeyAlreadyExists(const Key& key);
 
 
 };

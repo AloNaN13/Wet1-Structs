@@ -27,7 +27,7 @@ private:
 public:
     MusicManager(AvlTree<Artist,int>& artists_tree, StreamList& list_of_streams):
         artists_tree(artists_tree), list_of_streams(list_of_streams);
-    ~MusicManager() = default;
+    ~MusicManager();
     MusicManager(const MusicManager& music_manager) = default;
     MusicManager& operator=(const MusicManager& music_manager) = default;
 
@@ -38,16 +38,33 @@ public:
 
 };
 
+MusicManager::  MusicManager(AvlTree<Artist,int>& artists_tree, StreamList& list_of_streams):
+        artists_tree(artists_tree), list_of_streams(list_of_streams){
+   artists_tree=*(new AvlTree<Artist,int>);
+   list_of_streams=*(new(StreamList));
+   AvlTree<(AvlTree<int,int>)*,int> tree_for_0_streams=*(new AvlTree<(AvlTree<int,int>)*,int>) ;
+    StreamListNode node_for_0_streams=new  StreamListNode(tree_for_0_streams,0);
+    list_of_streams.insertNode(node_for_0_streams,0);
 
+   // StreamListNode(AvlTree<(AvlTree<int,int>)*,int>& stream_artists, int num_of_streams):
+    //            stream_artists(stream_artists), num_of_streams(num_of_streams), prev_node(nullptr),
+   // ListResult insertNode(StreamListNode* curr_node, AvlTree<(AvlTree<int,int>)*,int>& stream_artists, int& num_of_streams);
+}
+MusicManager::  ~MusicManager(){
+
+    delete (artists_tree);
+    delete list_of_streams;
+}
 
 
 
 void * Init(){
 
+
     // create AVLTree of Artist
     // create StreamList with Node 0
 
-    return new MusicManager;
+    return (void*)(new MusicManager);
 }
 
 
@@ -303,6 +320,10 @@ StatusType MusicManager:: getRecommendedSongs( int numOfSongs, int* artists, int
 
 // check if that is the way to use DELETE
 void Quit(void** DS){
+
+    delete ((*MusicManager)(**DS));
+    *DS= nullptr;
+
     //delete for all init "new"s?
     // put NULL in the pointer
 }
