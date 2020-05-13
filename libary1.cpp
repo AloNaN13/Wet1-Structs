@@ -11,6 +11,9 @@ void* Init(){
 }
 
 StatusType AddArtist(void* DS, int artistID, int numOfSongs){
+    if(DS== nullptr){
+        return
+    }
 
 
 }
@@ -32,4 +35,23 @@ StatusType NumberOfStreams(void* DS, int artistID, int songID, int* streams){
 
 StatusType GetRecommendedSongs(void* DS, int numOfSongs, int* artists, int* songs){
     
+}
+
+StatusType quit(void**DS ){
+
+}
+
+StatusType changeMMResultToStatusType(MMStatusType result){
+    if(result==MM_SUCCESS){
+        return SUCCESS;
+    }
+    if(result==MM_FAILURE){
+        return FAILURE;
+    }
+    if(result==MM_ALLOCATION_ERROR){
+        return  ALLOCATION_ERROR;
+    }
+    if(result=MM_INVALID_INPUT){
+        return  INVALID_INPUT;
+    }
 }
