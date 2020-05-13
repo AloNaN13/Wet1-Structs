@@ -4,42 +4,7 @@
 #include "library1.h"
 #include "MusicManager.h"
 
-void* Init(){
 
-    MusicManager* DS=new MusicManager();
-    return (void*)DS;
-}
-
-StatusType AddArtist(void* DS, int artistID, int numOfSongs){
-    if(DS== nullptr){
-        return
-    }
-
-
-}
-
-
-StatusType RemoveArtist(void* DS, int artistID) {
-
-}
-
-StatusType AddToSongCount(void* DS, int artistID, int songID){
-
-}
-
-
-StatusType NumberOfStreams(void* DS, int artistID, int songID, int* streams){
-
-}
-
-
-StatusType GetRecommendedSongs(void* DS, int numOfSongs, int* artists, int* songs){
-    
-}
-
-StatusType quit(void**DS ){
-
-}
 
 StatusType changeMMResultToStatusType(MMStatusType result){
     if(result==MM_SUCCESS){
@@ -55,3 +20,60 @@ StatusType changeMMResultToStatusType(MMStatusType result){
         return  INVALID_INPUT;
     }
 }
+void* Init(){
+
+    MusicManager* DS=new MusicManager();
+    return (void*)DS;
+}
+
+StatusType AddArtist(void* DS, int artistID, int numOfSongs){
+    if(DS== nullptr){
+        return INVALID_INPUT;
+    }
+    return changeMMResultToStatusType(((MusicManager*)DS)->MMAddArtist(artistID,numOfSongs));
+
+
+
+}
+
+
+StatusType RemoveArtist(void* DS, int artistID) {
+    if(DS== nullptr){
+        return INVALID_INPUT;
+    }
+    return changeMMResultToStatusType(((MusicManager*)DS)->MMRemoveArtist(artistID));
+
+
+}
+
+StatusType AddToSongCount(void* DS, int artistID, int songID){
+    if(DS== nullptr){
+        return INVALID_INPUT;
+    }
+    return changeMMResultToStatusType(((MusicManager*)DS)->MMAddToSongCount(artistID,songID));
+
+
+}
+
+
+StatusType NumberOfStreams(void* DS, int artistID, int songID, int* streams){
+    if(DS== nullptr){
+        return INVALID_INPUT;
+    }
+    return changeMMResultToStatusType(((MusicManager*)DS)->MMNumberOfStreams(artistID,songID,streams));
+
+
+}
+
+
+StatusType GetRecommendedSongs(void* DS, int numOfSongs, int* artists, int* songs){
+    if(DS== nullptr||numOfSongs<=0){
+        return INVALID_INPUT;
+    }
+    return changeMMResultToStatusType(((MusicManager*)DS)->MMgetRecommendedSongs(numOfSongs,artists,songs));
+}
+
+StatusType quit(void**DS ){
+
+}
+

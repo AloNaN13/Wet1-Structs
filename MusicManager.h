@@ -25,9 +25,9 @@ private:
     StreamList list_of_streams;
     int totalNumOfSongs;
 public:
-    MusicManager():artists_tree(artists_tree), list_of_streams(list_of_streams),totalNumOfSongs(0);
+    MusicManager();
     ~MusicManager();
-    MusicManager(const MusicManager& music_manager) = default;
+    //MusicManager(const MusicManager& music_manager) = default;
     MusicManager& operator=(const MusicManager& music_manager) = default;
 
     //methods
@@ -35,16 +35,16 @@ public:
     AvlTree<Artist,int>& GetArtistsTree() {return this->artists_tree;};
 
 
-    MMStatusType MMAddArtist(void* DS, int artistID, int numOfSongs);
-    MMStatusType MMRemoveArtist(void* DS, int artistID);
-    MMStatusType MMAddToSongCount(void* DS, int artistID, int songID);
-    MMStatusType   MMNumberOfStreams(void* DS, int artistID, int songID, int* streams);
+    MMStatusType MMAddArtist(int artistID, int numOfSongs);
+    MMStatusType MMRemoveArtist(int artistID);
+    MMStatusType MMAddToSongCount(int artistID, int songID);
+    MMStatusType   MMNumberOfStreams(int artistID, int songID, int* streams);
     MMStatusType MMgetRecommendedSongs( int numOfSongs, int* artists, int* songs);
 
 
 };
 
-MusicManager::  MusicManager(){
+MusicManager::  MusicManager():artists_tree(artists_tree), list_of_streams(list_of_streams),totalNumOfSongs(0){
    artists_tree=*(new AvlTree<Artist,int>);
    list_of_streams=*(new(StreamList));
    AvlTree<(AvlTree<int,int>)*,int> tree_for_0_streams=*(new AvlTree<(AvlTree<int,int>)*,int>) ;
@@ -66,10 +66,10 @@ MusicManager:: ~MusicManager(){
 
 
 
-MMStatusType MusicManager:: MMAddArtist(void* DS, int artistID, int numOfSongs){
+MMStatusType MusicManager:: MMAddArtist( int artistID, int numOfSongs){
     // check ERRORS
 
-    if(artistID<=0 || DS == nullptr || numOfSongs <=0){
+    if(artistID<=0 ||  numOfSongs <=0){
         return MM_INVALID_INPUT;
     }
 
@@ -102,10 +102,10 @@ MMStatusType MusicManager:: MMAddArtist(void* DS, int artistID, int numOfSongs){
 
 
 
-MMStatusType MusicManager::MMRemoveArtist(void* DS, int artistID){
+MMStatusType MusicManager::MMRemoveArtist(int artistID){
     // Check ERRORS
 
-    if(artistID<=0 || DS == nullptr){
+    if(artistID<=0 ){
         return MM_INVALID_INPUT;
     }
 
@@ -147,10 +147,10 @@ MMStatusType MusicManager::MMRemoveArtist(void* DS, int artistID){
 
 
 
-MMStatusType  MusicManager::MMAddToSongCount(void* DS, int artistID, int songID){
+MMStatusType  MusicManager::MMAddToSongCount(int artistID, int songID){
     // Check ERRORS
 
-    if(artistID<=0 || DS == nullptr || songID<0){
+    if(artistID<=0 ||  songID<0){
         return MM_INVALID_INPUT;
     }
 
@@ -282,10 +282,10 @@ MMStatusType  MusicManager::MMAddToSongCount(void* DS, int artistID, int songID)
 
 
 
-MMStatusType  MusicManager:: MMNumberOfStreams(void* DS, int artistID, int songID, int* streams){
+MMStatusType  MusicManager:: MMNumberOfStreams(int artistID, int songID, int* streams){
     // return ERRORS
 
-    if(artistID<=0 || DS == nullptr || streams == nullptr){
+    if(artistID<=0 ||  streams == nullptr){
         return MM_INVALID_INPUT;
     }
 
