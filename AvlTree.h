@@ -7,6 +7,8 @@
 #ifndef MIVNE_AVLTREE_H
 #define MIVNE_AVLTREE_H
 
+#include <cmath>
+
 typedef enum AvlTreeResult_t{AVL_KEY_ALREADY_EXISTS,AVL_SUCCESS,AVL_ALLOCATION_ERROR
 ,AVL_KEY_DOESNT_EXISTS
 }AvlTreeResult;
@@ -56,10 +58,12 @@ private:
     void fixHeightAfterInsert(Node& inserted_node);
     void fixHeightAfterRemove(Node* parent_of_removed);
     void fixHeightAfterRotation(Node* rotated_node);
+    Node* buildTreeFromArrays(Element* arrElement, Key* arrKey, int num );
 
 
 public:
     AvlTree():root(nullptr),iterator(nullptr),first(nullptr){};
+    AvlTree(Element* arrElement, Key* arrKey, int num);
     ~AvlTree();
     AvlTree& operator=(const AvlTree&)= default;
     AvlTreeResult insert (const Element& ele, const Key& key);
@@ -75,6 +79,44 @@ public:
 
 };
 
+
+template <class Element,class Key>
+AvlTree<Element,Key>::AvlTree(Element *arrElement, Key *arrKey, int num):root(nullptr)
+                                                ,iterator(nullptr),first(nullptr){
+
+    /*double tmp=(log(num)/log(2));
+    int height=(int)(log(num)/log(2));
+    if(tmp>height){
+        height++;
+    }*/
+    root=buildTreeFromArrays(arrElement,arrKey,num);
+   //create a full tree with height height
+}
+template <class Element,class Key>
+typename AvlTree<Element,Key>::Node* AvlTree<Element,Key>::
+        buildTreeFromArrays (Element* arrElement, Key* arrKey, int len ){
+            if(len==0){
+                return nullptr;
+            }
+            int current_index=(int)(len/2);
+            Node* currentNode=new Node(arrElement[current_index],arrKey[current_index]);
+            currentNode->left_son=buildTreeFromArrays(arrElement,arrKey,current_index);
+            currentNode->right_son=buildTreeFromArrays(arrElement+current_index+1,arrKey+current_index+1,len-current_index-1);
+            if(currentNode->right_son!= nullptr){
+                currentNode->right_son->parent=currentNode;
+                currentNode->hr=currentNode->right_son->getHeight();
+            }
+            else{
+                currentNode->hr=0;
+            }
+            if(currentNode->left_son!= nullptr){
+                currentNode->left_son->parent= currentNode;
+                currentNode->hl=currentNode->left_son->getHeight();
+            } else{
+                currentNode->hl=0;
+            }
+    return currentNode;
+}
 
 
 template <class Element,class Key>

@@ -279,7 +279,7 @@ StatusType MusicManager:: getRecommendedSongs( int numOfSongs, int* artists, int
 
             songs_of_current_artist_with_num_streams=(current_Node_of_hearings->getNodeAvlTree()).getNext();
         }
-
+        current_Node_of_hearings=current_Node_of_hearings->getNextNode();
     }
 
 }
