@@ -287,7 +287,7 @@ StatusType AddToSongCount(void* DS, int artistID, int songID){
 StatusType NumberOfStreams(void* DS, int artistID, int songID, int* streams){
     // return ERRORS
 
-    if(artistID<=0 || DS == nullptr || numOfSongs <0){
+    if(artistID<=0 || DS == nullptr || numOfSongs <0 || streams == nullptr){
         return MM_INVALID_INPUT;
     }
 
@@ -314,8 +314,11 @@ StatusType NumberOfStreams(void* DS, int artistID, int songID, int* streams){
 
 
 StatusType GetRecommendedSongs(void* DS, int numOfSongs, int* artists, int* songs){
-    if(DS== nullptr || numOfSongs<=0){
+    if(DS== nullptr){
         return MM_INVALID_INPUT;
+    }
+    if(numOfSongs<=0){
+        return MM_ALLOCATION_ERROR;
     }
     DS.getRecommendedSongs( int numOfSongs, int* artists, int* songs);
 }
