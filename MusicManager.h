@@ -285,7 +285,7 @@ MMStatusType  MusicManager::MMAddToSongCount(void* DS, int artistID, int songID)
 MMStatusType  MusicManager:: MMNumberOfStreams(void* DS, int artistID, int songID, int* streams){
     // return ERRORS
 
-    if(artistID<=0 || DS == nullptr || numOfSongs <0 || streams == nullptr){
+    if(artistID<=0 || DS == nullptr || streams == nullptr){
         return MM_INVALID_INPUT;
     }
 
