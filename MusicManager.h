@@ -58,23 +58,24 @@ StatusType AddArtist(void* DS, int artistID, int numOfSongs){
     AvlTree<Artist,int>& tree = *((MusicManager*)DS)->GetArtistsTree();
     Artist& artist_to_add = Artist(artistID, numOfSongs);
 
+
+    StreamList& list = *((MusicManager*)DS)->GetListOfStreams();
+    StreamListNode* zero_streams_node = GetListFirstNode();
+
     // all songs now point to the zero streams node
     for(int i = 0; i < artist_to_add.GetTotalNumOfSongs(); i++){
         artist_to_add.SetStreamsNumForSong(i, zero_streams_node);
     }
 
-
-
-    
+    AvlTree<AvlTree<int,int>,int>& streams_tree = artist_to_add.GetNumOfStreamsTree();
+    AvlTree<int,int>& songs_tree = AvlTree<int,int>();
+    //USE AVITAL's FUNCTION TO INSERT ALL SONGS AS NODES TO streams_tree - as "0"
+        // .insert(streams_tree,0);
 
     tree.insert(artist_to_add, artistID);
 
-    StreamList& list = *((MusicManager*)DS)->GetListOfStreams();
-    StreamListNode* zero_streams_node = GetListFirstNode();
-
-
     AvlTree<(AvlTree<int,int>)*,int>& node_tree = zero_streams_node->getNodeAvlTree();
-    node_tree.insert(/*THE POINTER TO THE STREAM_NUM*/,artistID);
+    node_tree.insert((&(*(tree.getElementptr(artistID))->GetNumOfStreamsTree())),artistID);
 
 
     // insert one node of "0" to the AvlTree of the artist - for NumOfStreams
@@ -101,15 +102,14 @@ StatusType RemoveArtist(void* DS, int artistID){
         StreamListNode* num_node = artist.GetSongNumOfStreamsNode(i);
         AvlTree<(AvlTree<int,int>)*,int>& node_tree = num_node->getNodeAvlTree();
         node_tree.remove(artistID);
+        if(i != 0){
+            if(node_tree.getFirst == nullptr){
+                *((MusicManager*)DS)->GetListOfStreams().removeNode(&num_node);
+            }
+        }
         artist.SetStreamsNumForSong(i,nullptr);
     }
     tree.remove(artistID);
-
-    // DELETE THE TREE IF NO MORE ARTISTS!
-
-
-
-
 
     // go to songs list
         // for every song
@@ -134,15 +134,92 @@ StatusType AddToSongCount(void* DS, int artistID, int songID){
     AvlTree<Artist,int>& tree = *((MusicManager*)DS)->GetArtistsTree();
     Artist& artist = *(tree.getElementptr(artistID));
     StreamList& list_of_streams = *((MusicManager*)DS)->GetListOfStreams();
+    AvlTree<int,int>* node_to_point_to = nullptr;
+    StreamListNode* stream_list_node_to_point_to = nullptr;
 
-    // get the node in list and its num_of_streams
-    StreamListNode* curr_num_node = artist.GetSongNumOfStreamsNode(songID);
-    AvlTree<Artist*,int> curr_num_node_tree = curr_num_node->getNodeAvlTree();
-    int num = curr_num_node->GetNodeNumOfStreams();
+    //change in the ArtistsTree
+    AvlTree<AvlTree<int,int>,int>& num_of_streams_tree = artist.GetNumOfStreamsTree();
+    StreamListNode* num_of_streams_list_node = artist.GetSongNumOfStreamsNode(songID);
+    int songs_num_of_streams = *(num_of_streams_list_node)->GetNodeNumOfStreams();
+    // remove song node
+    AvlTree<int,int>& num_of_streams_tree_node = *(num_of_streams_tree.getElementptr(songs_num_of_streams));
+    num_of_streams_tree_node.remove(songID);
+    if(num_of_streams_tree_node.getFirst() == nullptr){
+        num_of_streams_tree.remove(songs_num_of_streams);
+    }
+    // insert song to the next num_of_streams node
+    AvlTree<int,int>& num_of_streams_tree_next_node = *(num_of_streams_tree.getNext()) // HOW TO USE GetNext?
+    if(num_of_streams_tree_next_node.getKey() == ) {         // HOW TO USE GetKey?
+        // get the next num_of_streams node
+        // check if +1 exists
+        // if yes - add the song to it
+        node_to_point_to = &num_of_streams_tree_next_node;
+    }
+    else if{
+        AvlTree<int,int>& new_songs_tree = AvlTree<int,int>();
+        new_songs_tree.insert(songID,songID);
+        num_of_streams_tree.insert(new_songs_tree, songs_num_of_streams+1);
+        node_to_point_to = num_of_streams_tree.getElementptr(songs_num_of_streams+1);
+    }
 
-    list_of_streams.insertNode(curr_num_node, curr_num_node_tree, num+1);
+    // change in the List
+    StreamListNode* num_of_streams_list_next_node = num_of_streams_list_node->getNextNode();
+    if(*(num_of_streams_list_next_node)->GetNodeNumOfStreams() == songs_num_of_streams+1){
+        AvlTree<(AvlTree<int,int>)*,int>& num_of_streams_list_next_node_tree =
+                *(num_of_streams_list_next_node)->getNodeAvlTree();
+        num_of_streams_list_next_node_tree.insert(node_to_point_to,artistID);
+        stream_list_node_to_point_to = num_of_streams_list_next_node;
+    }
+    else if{
+        AvlTree<(AvlTree<int,int>)*,int>& new_node_tree = AvlTree<(AvlTree<int,int>)*,int>();
+        new_node_tree.insert(node_to_point_to,artistID);
+        list_of_streams.insertNode(num_of_streams_list_node,new_node_tree,songs_num_of_streams+1);
+        stream_list_node_to_point_to = num_of_streams_list_node->getNextNode();
+    }
+    // remove the artist's node from the original node's tree
+    AvlTree<(AvlTree<int,int>)*,int>& num_of_streams_list_node_tree = *(num_of_streams_list_node)->getNodeAvlTree();
+    num_of_streams_list_node_tree.remove(artistID);
+    if(*(num_of_streams_list_node)->GetNodeNumOfStreams() != 0){
+        if(num_of_streams_list_node_tree.getFirst() == nullptr){
+            list_of_streams.removeNode(num_of_streams_list_node);
+        }
+    }
 
-    curr_num_node->SetPrevNode();
+    // change in the songs array
+    artist.SetStreamsNumForSong(songID,stream_list_node_to_point_to);
+
+
+
+
+    //get the tree, the artist and the list
+
+    //change in the ArtistsTree
+        // find the songs num_of_streams in the array
+        // get the right num_of_streams tree
+        // remove song node from it
+            // check if it was the only song in the tree
+                // if yes - remove the num_of_streams node
+        // get the next num_of_streams node
+            // check if +1 exists
+                // if yes - add the song to it
+                // if no - create a new num_of_streams node and add the song to it
+
+    // change in the List
+        // get the node in the StreamList from the songs array
+        // get the node's AVLTree
+        // get the next StreamListNode
+            // check if +1
+                // if yes - add the artist to it - pointer to the new "num_of_streams" node
+                // if no
+                    // add a new +1 node to the StreamList
+                    // add the artist to the node's tree - pointer the the new "num_of_streams" node
+        // remove the artist's node from the tree
+            // check if it wasn't the first node
+                // check if it was the only song in the tree
+                    // if yes - remove the node from the List
+
+    // change in the songs array
+        // change the pointer in the songID index to points to the new node in the StreamList
 
 }
 
@@ -210,9 +287,10 @@ StatusType MusicManager:: getRecommendedSongs( int numOfSongs, int* artists, int
 
 
 
-
+// check if that is the way to use DELETE
 void Quit(void** DS){
-    //write
+    //delete for all init "new"s?
+    // put NULL in the pointer
 }
 
 

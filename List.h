@@ -59,7 +59,7 @@ private:
 
 public:
     StreamList(): first_node(nullptr), last_node(nullptr) {};
-    ~StreamList();
+    ~StreamList() = default; // really default?
     //StreamList(const StreamList& list) = delete;
     //StreamList& operator=(const StreamList& list) = delete;
 
@@ -81,11 +81,12 @@ public:
 };
 
 
-
+/*
 StreamList::~StreamList(){
-    // to implement
+    // to implement?
+    it's default right now
 }
-
+*/
 
 // inserts after the curr_node
 ListResult StreamList::insertNode(StreamListNode* curr_node, AvlTree<(AvlTree<int,int>)*,int>& stream_artists, int& num_of_streams) {
