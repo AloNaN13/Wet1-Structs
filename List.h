@@ -25,10 +25,13 @@ private:
     StreamListNode* prev_node;
     StreamListNode* next_node;
 public:
-    StreamListNode(AvlTree<AvlTree<int,int>*,int>& stream_artists, int num_of_streams):
+    StreamListNode(int num_of_streams):
+            stream_artists(*(new AvlTree<AvlTree<int,int>*,int>())), num_of_streams(num_of_streams), prev_node(nullptr),
+            next_node(nullptr) {};
+    StreamListNode(AvlTree<AvlTree<int,int>*,int>()& stream_artists, int num_of_streams):
             stream_artists(stream_artists), num_of_streams(num_of_streams), prev_node(nullptr),
             next_node(nullptr) {};
-    ~StreamListNode() = default;
+    ~StreamListNode() {delete[] stream_artists;};
     //StreamListNode(const StreamListNode& node) = delete;
     //StreamListNode& operator=(const StreamListNode& node) = delete;
 
@@ -41,6 +44,7 @@ public:
     //ListNode& getNodeFromKey(const Key key);
 
 };
+
 
 
 
@@ -58,7 +62,7 @@ private:
 
 
 public:
-    StreamList(): first_node(nullptr), last_node(nullptr) {};
+    StreamList(): first_node(*(new StreamListNode(0))), last_node(nullptr) {};
     ~StreamList(); // not default?
     //StreamList(const StreamList& list) = delete;
     //StreamList& operator=(const StreamList& list) = delete;
