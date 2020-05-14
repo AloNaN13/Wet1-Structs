@@ -10,12 +10,12 @@ add_executable(Wet1_Structs
         #Artist.h
         #AVL_tests.h
         AvlTree.h
-        #libary1.cpp
-        #library1.h
-        #List.cpp
-        #List.h
-        main.cpp
-        #main1.cpp
-        #MusicManager.cpp
-        #MusicManager.h
+        libary1.cpp
+        library1.h
+        List.cpp
+        List.h
+        #main.cpp
+        main1.cpp
+        MusicManager.cpp
+        MusicManager.h
         )
