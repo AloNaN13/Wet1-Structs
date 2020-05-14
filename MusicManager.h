@@ -44,16 +44,13 @@ public:
 
 };
 
-MusicManager:: MusicManager():artists_tree(*(new AvlTree<Artist,int>)), list_of_streams(*(new(StreamList))),
-                            totalNumOfSongs(0){
-    AvlTree<(AvlTree<int,int>)*,int> tree_for_0_streams=*(new AvlTree<(AvlTree<int,int>)*,int>) ;
-    StreamListNode node_for_0_streams=new  StreamListNode(tree_for_0_streams,0);
-    list_of_streams.insertNode(node_for_0_streams,0);
-
-   // StreamListNode(AvlTree<(AvlTree<int,int>)*,int>& stream_artists, int num_of_streams):
-    //            stream_artists(stream_artists), num_of_streams(num_of_streams), prev_node(nullptr),
-   // ListResult insertNode(StreamListNode* curr_node, AvlTree<(AvlTree<int,int>)*,int>& stream_artists, int& num_of_streams);
+MusicManager:: MusicManager():artists_tree(*new AvlTree<Artist,int>), list_of_streams(*new(StreamList)),
+                            totalNumOfSongs(0) {
+    AvlTree<AvlTree<int, int> *, int> tree_for_0_streams = *(new AvlTree<AvlTree<int, int> *, int>);
+    StreamListNode node_for_0_streams = *(new StreamListNode(tree_for_0_streams, 0));
+    list_of_streams.insertNode(node_for_0_streams, 0);
 }
+
 MusicManager:: ~MusicManager(){
     delete artists_tree;
     delete list_of_streams;
@@ -116,7 +113,7 @@ MMStatusType MusicManager::MMRemoveArtist(int artistID){
     // COMPLEXITY GOOD ENOUGH? NO NEED TO MAKE NULLS?
     for(int i = 0; i < artist.GetTotalNumOfSongs(); i++){
         StreamListNode* num_node = artist.GetSongNumOfStreamsNode(i);
-        AvlTree<(AvlTree<int,int>)*,int>& node_tree = num_node->getNodeAvlTree();
+        AvlTree<AvlTree<int,int>*,int>& node_tree = num_node->getNodeAvlTree();
         node_tree.remove(artistID);
         if(i != 0){
             if(node_tree.getFirst == nullptr){
@@ -331,7 +328,7 @@ MMStatusType MusicManager:: MMgetRecommendedSongs( int numOfSongs, int* artists,
     int current_ArtistId;
     while (count<numOfSongs){
         int numStreams=0;
-        songs_of_current_artist_with_num_streams=(current_Node_of_hearings->getNodeAvlTree()).getFirst();
+        songs_of_current_artist_with_num_streams=*(((current_Node_of_hearings->getNodeAvlTree())).getFirst());
 
         while (count<numOfSongs &&songs_of_current_artist_with_num_streams){
             song=songs_of_current_artist_with_num_streams->getFirst();
@@ -344,7 +341,7 @@ MMStatusType MusicManager:: MMgetRecommendedSongs( int numOfSongs, int* artists,
                 song=songs_of_current_artist_with_num_streams->getNext();
             }
 
-            songs_of_current_artist_with_num_streams=(current_Node_of_hearings->getNodeAvlTree()).getNext();
+            songs_of_current_artist_with_num_streams=*((current_Node_of_hearings->getNodeAvlTree()).getNext());
         }
         current_Node_of_hearings=current_Node_of_hearings->getNextNode();
     }

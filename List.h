@@ -21,11 +21,11 @@ typedef enum StreamListResult_t{
 class StreamListNode{
 private:
     const int num_of_streams;
-    AvlTree<(AvlTree<int,int>)*,int>& stream_artists;
+    AvlTree<AvlTree<int,int>*,int>& stream_artists;
     StreamListNode* prev_node;
     StreamListNode* next_node;
 public:
-    StreamListNode(AvlTree<(AvlTree<int,int>)*,int>& stream_artists, int num_of_streams):
+    StreamListNode(AvlTree<AvlTree<int,int>*,int>& stream_artists, int num_of_streams):
             stream_artists(stream_artists), num_of_streams(num_of_streams), prev_node(nullptr),
             next_node(nullptr) {};
     ~StreamListNode() = default;

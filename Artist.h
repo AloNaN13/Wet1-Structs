@@ -17,6 +17,7 @@ private:
     int total_num_of_songs;
     StreamListNode** full_songs_list;
     AvlTree<AvlTree<int,int>,int>& num_of_streams_tree;
+
 public:
     Artist(int id, int num_of_songs);
     ~Artist();
@@ -56,8 +57,8 @@ Artist::Artist(int id, int num_of_songs) : num_of_streams_tree(*(new AvlTree<Avl
     for(int i = 0; i < num_of_songs; i++){
         songs_arr[i] = i;
     }
-    AvlTree<int,int>& songs_tree = AvlTree<int,int>(songs_arr, songs_arr, num_of_songs);
-    delete[] songs_arr;
+    AvlTree<int,int> songs_tree = AvlTree<int,int>(songs_arr, songs_arr, num_of_songs);
+    //delete[] songs_arr;
 
     // create AvlTree for streams_tree - with first node "0" for all the songs
     num_of_streams_tree.insert(songs_tree,0);
@@ -75,7 +76,7 @@ Artist::~Artist() {
 
 
 StreamListNode* Artist::GetSongNumOfStreamsNode(int song_id) {
-    return this.full_songs_list[song_id];
+    return this->full_songs_list[song_id];
 }
 
 void Artist::SetStreamsNumForSong(int song_id, StreamListNode* wanted_node){
