@@ -35,9 +35,9 @@ public:
     int GetNodeNumOfStreams() {return this->num_of_streams;};
     StreamListNode* getPrevNode() { return this.prev_node;};
     void SetPrevNode(StreamListNode* new_prev) { this->prev_node=new_prev;}; // void?
-    StreamListNode* getNextNode() { return this.next_node;};
+    StreamListNode* getNextNode() { return this->next_node;};
     void SetNextNode(StreamListNode* new_next) { this->next_node=new_next;}; // void?
-    AvlTree<AvlTree<int,int>*,int>& getNodeAvlTree() {return this.stream_artists;};
+    AvlTree<AvlTree<int,int>*,int>& getNodeAvlTree() {return this->stream_artists; };
     //ListNode& getNodeFromKey(const Key key);
 
 };
