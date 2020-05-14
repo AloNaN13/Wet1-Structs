@@ -8,6 +8,8 @@
 #include "AvlTree.h"
 #include "List.h"
 
+class StreamList;
+class StreamListNode;
 
 class Artist{
 private:
@@ -26,27 +28,26 @@ public:
     StreamListNode* GetSongNumOfStreamsNode(int song_id);
     int GetTotalNumOfSongs() {return this->total_num_of_songs;};
     AvlTree<AvlTree<int,int>,int>& GetNumOfStreamsTree() {return this->num_of_streams_tree;};
-    AvlTree<int,int>* getSongsWithNumOfStreams(const Key& key){
+    /*AvlTree<int,int>* getSongsWithNumOfStreams(const Key& key){
         return num_of_streams_tree.getElementptr(key);
     }
-
+     */
 
     //editors
     // change num_of_streams by uploading 1
     // check ERRORS
 
-    ArtistResult SetStreamsNumForSong(int song_id, StreamListNode* wanted_node);
+    void SetStreamsNumForSong(int song_id, StreamListNode* wanted_node);
 
 
 
 };
 
-Artist::Artist(int id, int num_of_songs) {
+Artist::Artist(int id, int num_of_songs) : num_of_streams_tree(*(new AvlTree<AvlTree<int,int>,int>())),
+                                           full_songs_list((new StreamListNode*[num_of_songs])){
 
     artist_id = id;
     total_num_of_songs = num_of_songs;
-    // allocate space for full_song_list
-    full_songs_list = *(new StreamListNode*[num_of_songs]);
 
     // link all songs the the Node 0 in StreamList - to implement in the AddArtist Func?
 
@@ -55,11 +56,10 @@ Artist::Artist(int id, int num_of_songs) {
     for(int i = 0; i < num_of_songs; i++){
         songs_arr[i] = i;
     }
-    AvlTree<int,int>& songs_tree = AvlTree(songs_arr, songs_arr, num_of_songs);
+    AvlTree<int,int>& songs_tree = AvlTree<int,int>(songs_arr, songs_arr, num_of_songs);
     delete[] songs_arr;
 
     // create AvlTree for streams_tree - with first node "0" for all the songs
-    num_of_streams_tree = *(new AvlTree<AvlTree<int,int>,int>());
     num_of_streams_tree.insert(songs_tree,0);
 
 }
@@ -78,9 +78,8 @@ StreamListNode* Artist::GetSongNumOfStreamsNode(int song_id) {
     return this.full_songs_list[song_id];
 }
 
-ArtistResult Artist::SetStreamsNumForSong(int song_id, StreamListNode* wanted_node){
+void Artist::SetStreamsNumForSong(int song_id, StreamListNode* wanted_node){
     full_songs_list[song_id] = &wanted_node;
-    StreamListNode
 }
 
 

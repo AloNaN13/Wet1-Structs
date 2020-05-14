@@ -38,16 +38,15 @@ public:
     MMStatusType MMAddArtist(int artistID, int numOfSongs);
     MMStatusType MMRemoveArtist(int artistID);
     MMStatusType MMAddToSongCount(int artistID, int songID);
-    MMStatusType   MMNumberOfStreams(int artistID, int songID, int* streams);
+    MMStatusType MMNumberOfStreams(int artistID, int songID, int* streams);
     MMStatusType MMgetRecommendedSongs( int numOfSongs, int* artists, int* songs);
 
 
 };
 
-MusicManager::  MusicManager():artists_tree(artists_tree), list_of_streams(list_of_streams),totalNumOfSongs(0){
-   artists_tree=*(new AvlTree<Artist,int>);
-   list_of_streams=*(new(StreamList));
-   AvlTree<(AvlTree<int,int>)*,int> tree_for_0_streams=*(new AvlTree<(AvlTree<int,int>)*,int>) ;
+MusicManager:: MusicManager():artists_tree(*(new AvlTree<Artist,int>)), list_of_streams(*(new(StreamList))),
+                            totalNumOfSongs(0){
+    AvlTree<(AvlTree<int,int>)*,int> tree_for_0_streams=*(new AvlTree<(AvlTree<int,int>)*,int>) ;
     StreamListNode node_for_0_streams=new  StreamListNode(tree_for_0_streams,0);
     list_of_streams.insertNode(node_for_0_streams,0);
 
@@ -56,7 +55,6 @@ MusicManager::  MusicManager():artists_tree(artists_tree), list_of_streams(list_
    // ListResult insertNode(StreamListNode* curr_node, AvlTree<(AvlTree<int,int>)*,int>& stream_artists, int& num_of_streams);
 }
 MusicManager:: ~MusicManager(){
-
     delete artists_tree;
     delete list_of_streams;
 }
