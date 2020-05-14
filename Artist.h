@@ -70,7 +70,7 @@ Artist::~Artist() {
     // delete full_song_list
     delete[] full_songs_list;
     // delete nodes in AvlTree for streams_tree - use the destructor?
-    delete[] num_of_streams_tree;
+    delete(&num_of_streams_tree);
 
 }
 
@@ -80,7 +80,7 @@ StreamListNode* Artist::GetSongNumOfStreamsNode(int song_id) {
 }
 
 void Artist::SetStreamsNumForSong(int song_id, StreamListNode* wanted_node){
-    full_songs_list[song_id] = &wanted_node;
+    full_songs_list[song_id] = wanted_node;
 }
 
 
