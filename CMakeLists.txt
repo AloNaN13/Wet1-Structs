@@ -9,5 +9,7 @@ add_executable(
         MusicManager.h
         MusicManager.cpp
         Artist.h
+        Artist.cpp
         List.h
+        List.cpp
         libary1.cpp)
