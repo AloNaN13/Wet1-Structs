@@ -204,13 +204,13 @@ MMStatusType  MusicManager::MMAddToSongCount(int artistID, int songID){
     // change in the List
     StreamListNode* num_of_streams_list_next_node = num_of_streams_list_node->getNextNode();
     if(*(num_of_streams_list_next_node)->GetNodeNumOfStreams() == songs_num_of_streams+1){
-        AvlTree<(AvlTree<int,int>)*,int>& num_of_streams_list_next_node_tree =
+        AvlTree<AvlTree<int,int>*,int>& num_of_streams_list_next_node_tree =
                 *(num_of_streams_list_next_node)->getNodeAvlTree();
         num_of_streams_list_next_node_tree.insert(node_to_point_to,artistID);
         stream_list_node_to_point_to = num_of_streams_list_next_node;
     }
     else if{
-        AvlTree<(AvlTree<int,int>)*,int>& new_node_tree = *(new AvlTree<(AvlTree<int,int>)*,int>());
+        AvlTree<AvlTree<int,int>*,int>& new_node_tree = *(new AvlTree<AvlTree<int,int>*,int>());
         new_node_tree.insert(node_to_point_to,artistID);
         list_of_streams.insertNode(num_of_streams_list_node,new_node_tree,songs_num_of_streams+1);
         stream_list_node_to_point_to = num_of_streams_list_node->getNextNode();
