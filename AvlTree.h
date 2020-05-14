@@ -1,13 +1,16 @@
 //
 // Created by User on 4/30/2020.
 //
-#define MAX(a, b) ((a > b) ? a : b)
 
 
 #ifndef MIVNE_AVLTREE_H
 #define MIVNE_AVLTREE_H
 
+//#define MAX(a, b) ((a > b) ? a : b)
+
 #include <cmath>
+#include <iostream>
+using namespace std;
 
 typedef enum AvlTreeResult_t{AVL_KEY_ALREADY_EXISTS,AVL_SUCCESS,AVL_ALLOCATION_ERROR
 ,AVL_KEY_DOESNT_EXISTS
@@ -27,13 +30,21 @@ private:
         int hr;
 
 
-        Node(const Element& data,const Key& key):data(*new Element(data)),key(*new Key(key)),right_son(nullptr)
+        Node(const Element& data,const Key& key):data(*(new Element(data))),key(*(new Key(key))),right_son(nullptr)
                 ,left_son(nullptr),parent(nullptr),hl(0),hr(0){};
-        ~Node(){delete &data;};
+        ~Node(){
+            delete &data;
+            delete &key;
+        };
         Node& operator=(const Node&)= default;
         //Node& operator=(Node&)= default;
 
-        int getHeight(){return 1+MAX(hr,hl);};
+        int getHeight(){
+            if(hl>hr){
+                return 1+hl;
+        }
+            return 1+hr;
+        };
         int getBalanceFactor();
 
         Node* getParent(){ return parent;};
@@ -76,10 +87,37 @@ public:
         return iterator->key;
     }
     bool findKeyAlreadyExists(const Key& key);
+    void printTree(){
+        if(root){
+           printTreeInOrder(root) ;
+        }
+    }
+    void clear(){
+        if (root != nullptr) {
+            deleteAllNodes(root);
+        }
+        root= nullptr;
+        first= nullptr;
+        iterator= nullptr;
+    }
+    void printTreeInOrder(Node* startingNode);
 
 
 };
 
+template <class Element,class Key>
+void AvlTree<Element,Key>:: printTreeInOrder(Node* startingNode){
+    if(!startingNode){
+        return;
+    }
+    printTreeInOrder(startingNode->left_son);
+
+    cout<< (int)startingNode->data << " BF: "<< startingNode->getBalanceFactor()<< " H: "<<startingNode->getHeight()<<"\n";
+    printTreeInOrder(startingNode->right_son);
+
+
+
+}
 
 template <class Element,class Key>
 AvlTree<Element,Key>::AvlTree(Element *arrElement, Key *arrKey, int num):root(nullptr)
@@ -216,6 +254,16 @@ void AvlTree<Element,Key>::fixHeightAfterRemove(Node* parent_of_removed) {
 template <class Element,class Key>
 void AvlTree<Element,Key>::fixHeightAfterRotation(Node* rotated_Node) {
     Node* tmp=rotated_Node->parent;
+    if(!rotated_Node->left_son){
+        rotated_Node->hl=0;
+    }else{
+        rotated_Node->hl=rotated_Node->left_son->getHeight();
+    }
+    if(!rotated_Node->right_son){
+        rotated_Node->hr=0;
+    } else{
+        rotated_Node->hr=rotated_Node->right_son->getHeight();
+    }
     while (tmp!= nullptr){
         if(tmp->left_son==rotated_Node){
             tmp->hl=rotated_Node->getHeight();
@@ -284,6 +332,9 @@ AvlTree<Element,Key>::~AvlTree(){
     if(root){
         deleteAllNodes(root);
     }
+    first= nullptr;
+    root= nullptr;
+    iterator= nullptr;
 }
 
 template <class Element,class Key>
@@ -291,8 +342,10 @@ void AvlTree<Element,Key>::deleteAllNodes(Node *node) {
     if(node){
         deleteAllNodes((node->right_son));
         deleteAllNodes((node->left_son));
+
         delete(node);
     }
+
 }
 
 template <class Element,class Key>
@@ -510,12 +563,16 @@ void AvlTree<Element,Key>::swapNodes(Node* node_to_del,Node* next_by_value) {
     if(node_to_del==next_by_value){
         return;
     }
+    if(node_to_del==root){
+        root=next_by_value;
+    }
     if(node_to_del->right_son==next_by_value){
         next_by_value->left_son=node_to_del->left_son;
         if(next_by_value->left_son){
             next_by_value->left_son->parent=next_by_value;
         }
         next_by_value->hl=node_to_del->hl;
+        node_to_del->left_son= nullptr;
         node_to_del->hl=0;
         node_to_del->hr=next_by_value->hr;
         next_by_value->hr++;
@@ -554,6 +611,14 @@ void AvlTree<Element,Key>::swapNodes(Node* node_to_del,Node* next_by_value) {
     node_to_del->left_son= nullptr;
     node_to_del->right_son=parent->left_son;
     parent->left_son=node_to_del;
+    if(node_to_del->parent){
+        if(node_to_del->parent->left_son=node_to_del){
+            node_to_del->parent->left_son=next_by_value;
+        }
+        else{
+            node_to_del->parent->right_son=next_by_value;
+        }
+    }
     node_to_del->parent=parent;
     if(next_by_value->parent== nullptr){
         root=next_by_value;
@@ -630,7 +695,9 @@ void AvlTree<Element,Key>::balanceAfterRemove(Node &parent_of_deleted) {
             fixHeightAfterRotation(p);
             return;
         }
-        tmp=tmp->parent;
+        if(tmp!=root) {
+            tmp = tmp->parent;
+        }
     }
 
 
@@ -709,7 +776,11 @@ AvlTreeResult AvlTree<Element,Key>:: remove (const Key& key){
         parent=parent->parent;
     }
     if(setFirst){
+        if(root== nullptr){
+            return AVL_SUCCESS;
+        }
         first=root;
+
         while (first &&first->left_son){
             first=first->left_son;
         }

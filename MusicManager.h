@@ -18,6 +18,7 @@ typedef enum MMStatusType_t{
 }MMStatusType;
 
 
+
 class MusicManager{
 private:
     AvlTree<Artist,int> artists_tree;
