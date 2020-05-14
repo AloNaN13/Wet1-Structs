@@ -1,15 +1,20 @@
 cmake_minimum_required(VERSION 3.15)
-project(Wet1-Structs)
+project(Wet1_Structs)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 
-add_executable(
-        main.cpp
-        AvlTree.h
-        MusicManager.h
-        MusicManager.cpp
-        Artist.h
+include_directories(.)
+
+add_executable(Wet1_Structs
         Artist.cpp
-        List.h
+        Artist.h
+        AVL_tests.h
+        AvlTree.h
+        libary1.cpp
+        library1.h
         List.cpp
-        libary1.cpp)
+        List.h
+        #main.cpp
+        #main1.cpp
+        MusicManager.cpp
+        MusicManager.h)
