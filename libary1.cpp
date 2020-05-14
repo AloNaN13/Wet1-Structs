@@ -74,7 +74,7 @@ StatusType GetRecommendedSongs(void* DS, int numOfSongs, int* artists, int* song
     return changeMMResultToStatusType(((MusicManager*)DS)->MMgetRecommendedSongs(numOfSongs,artists,songs));
 }
 
-StatusType quit(void**DS ){
+void Quit(void**DS ){
     delete ((MusicManager*)(*DS));
     *DS= nullptr;
 }
