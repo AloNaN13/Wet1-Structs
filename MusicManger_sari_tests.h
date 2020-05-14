@@ -3,6 +3,7 @@
 #define WET1_DATASTRUCTS_MUSICMANGER_TESTS_H
 
 #include "MusicManager.h"
+#include <assert.h>
 #include <iostream>
 
 void MusicMangerTest();
@@ -55,37 +56,37 @@ void MusicManger_test3(int artistSize,int songSize){
         switch(operation){
             case 0://insert
                 if(occ[artist]){
-                    assert(manger.AddArtist(artist,song)==MM_FAILURE);
+                    assert(manger.MMAddArtist(artist,song)==MM_FAILURE);
                 }
                 else{
-                    assert(manger.AddArtist(artist,song)==MM_SUCCESS);
+                    assert(manger.MMAddArtist(artist,song)==MM_SUCCESS);
                     occ[artist]=true;
                     numOfSongs[artist]=song;
                 }
             break;
             case 1://remove
                 if(occ[artist]){
-                    assert(manger.RemoveArtist(artist)==MM_SUCCESS);
+                    assert(manger.MMRemoveArtist(artist)==MM_SUCCESS);
                     occ[artist] = false;
                     numOfSongs[artist]=0;
                     for(int i=0;i<songSize;i++) array[artist*songSize+i] = 0;
                 }
                 else{
-                    assert(manger.RemoveArtist(artist)==MM_FAILURE);
+                    assert(manger.MMRemoveArtist(artist)==MM_FAILURE);
                 }
             break;
             default://addcount
                 if(occ[artist]){
                     if(song>numOfSongs[artist]-1){
-                        assert(manger.AddToSongCount(artist,song)==MM_INVALID_INPUT);
+                        assert(manger.MMAddToSongCount(artist,song)==MM_INVALID_INPUT);
                     }
                     else{
-                        assert(manger.AddToSongCount(artist,song)==MM_SUCCESS);
+                        assert(manger.MMAddToSongCount(artist,song)==MM_SUCCESS);
                         array[artist*songSize+song]+=1;
                     }
                 }
                 else{
-                    assert(manger.AddToSongCount(artist,song)==MM_FAILURE);
+                    assert(manger.MMAddToSongCount(artist,song)==MM_FAILURE);
                 }
             break;
         }
@@ -99,14 +100,14 @@ void MusicManger_test3(int artistSize,int songSize){
         }
     }
     //testing get reccomended
-    assert(manger.GetRecommendedSongs(totalSongs+1,orderedArtists,orderedSongs)==MM_FAILURE);
-    assert(manger.GetRecommendedSongs(totalSongs+2,orderedArtists,orderedSongs)==MM_FAILURE);
-    assert(manger.GetRecommendedSongs(totalSongs+10,orderedArtists,orderedSongs)==MM_FAILURE);
-    assert(manger.GetRecommendedSongs(totalSongs+50,orderedArtists,orderedSongs)==MM_FAILURE);
-    assert(manger.GetRecommendedSongs(totalSongs+70,orderedArtists,orderedSongs)==MM_FAILURE);
-    assert(manger.GetRecommendedSongs(0,orderedArtists,orderedSongs)==MM_INVALID_INPUT);
+    assert(manger.MMgetRecommendedSongs(totalSongs+1,orderedArtists,orderedSongs)==MM_FAILURE);
+    assert(manger.MMgetRecommendedSongs(totalSongs+2,orderedArtists,orderedSongs)==MM_FAILURE);
+    assert(manger.MMgetRecommendedSongs(totalSongs+10,orderedArtists,orderedSongs)==MM_FAILURE);
+    assert(manger.MMgetRecommendedSongs(totalSongs+50,orderedArtists,orderedSongs)==MM_FAILURE);
+    assert(manger.MMgetRecommendedSongs(totalSongs+70,orderedArtists,orderedSongs)==MM_FAILURE);
+    assert(manger.MMgetRecommendedSongs(0,orderedArtists,orderedSongs)==MM_INVALID_INPUT);
 
-    assert(manger.GetRecommendedSongs(totalSongs,orderedArtists,orderedSongs)==MM_SUCCESS);
+    assert(manger.MMgetRecommendedSongs(totalSongs,orderedArtists,orderedSongs)==MM_SUCCESS);
     int * orderedArtists_test = new int[songSize*artistSize];
     int* orderedSongs_test = new int[songSize*artistSize];
     for(int curr =0 ;curr<totalSongs;curr++){
@@ -149,16 +150,16 @@ void MusicManger_test3(int artistSize,int songSize){
     for(int i=-10;i<artistSize;i++){
         for(int j=-10;j<songSize;j++){
             if(i<=0 || j<0){
-                assert(manger.numberOfStreams(i,j,&streams)==MM_INVALID_INPUT);
+                assert(manger.MMNumberOfStreams(i,j,&streams)==MM_INVALID_INPUT);
             }
             else if(!occ[i]){
-                assert(manger.numberOfStreams(i,j,&streams)==MM_FAILURE);
+                assert(manger.MMNumberOfStreams(i,j,&streams)==MM_FAILURE);
             }
             else if(j>=numOfSongs[i]){
-                assert(manger.numberOfStreams(i,j,&streams)==MM_INVALID_INPUT);
+                assert(manger.MMNumberOfStreams(i,j,&streams)==MM_INVALID_INPUT);
             }
             else{
-                assert(manger.numberOfStreams(i,j,&streams)==MM_SUCCESS);
+                assert(manger.MMNumberOfStreams(i,j,&streams)==MM_SUCCESS);
                 assert(streams == array[i*songSize + j]);
             }
         }
@@ -175,13 +176,13 @@ void MusicManger_test2(){
     MusicManager manger;
     int streams=0;
     //testing while empty
-    assert(manger.numberOfStreams(1,1,&streams)==MM_FAILURE);
-    assert(manger.RemoveArtist(4)==MM_FAILURE);
-    assert(manger.AddToSongCount(1,1)==MM_FAILURE);
-    assert(manger.GetRecommendedSongs(1,nullptr,nullptr)==MM_FAILURE);
+    assert(manger.MMNumberOfStreams(1,1,&streams)==MM_FAILURE);
+    assert(manger.MMRemoveArtist(4)==MM_FAILURE);
+    assert(manger.MMAddToSongCount(1,1)==MM_FAILURE);
+    assert(manger.MMgetRecommendedSongs(1,nullptr,nullptr)==MM_FAILURE);
     //starting:
-    assert(manger.AddArtist(5,7)==MM_SUCCESS);
-    assert(manger.AddArtist(5,10)==MM_FAILURE);
+    assert(manger.MMAddArtist(5,7)==MM_SUCCESS);
+    assert(manger.MMAddArtist(5,10)==MM_FAILURE);
 
 }
 
@@ -189,37 +190,37 @@ void MusicManger_test2(){
 void MusicManger_test1(){
     MusicManager manager;
 
-    assert(manager.RemoveArtist(1)==MM_FAILURE);
-    assert(manager.AddArtist(1,5)==MM_SUCCESS);
-    assert(manager.AddArtist(1,3)==MM_FAILURE);
-    assert(manager.AddArtist(1,7)==MM_FAILURE);
-    assert(manager.AddToSongCount(1,6)==MM_INVALID_INPUT);
-    assert(manager.AddToSongCount(1,4)==MM_SUCCESS);
-    assert(manager.AddToSongCount(1,5)==MM_INVALID_INPUT);
-    assert(manager.AddToSongCount(1,0)==MM_SUCCESS);
+    assert(manager.MMRemoveArtist(1)==MM_FAILURE);
+    assert(manager.MMAddArtist(1,5)==MM_SUCCESS);
+    assert(manager.MMAddArtist(1,3)==MM_FAILURE);
+    assert(manager.MMAddArtist(1,7)==MM_FAILURE);
+    assert(manager.MMAddToSongCount(1,6)==MM_INVALID_INPUT);
+    assert(manager.MMAddToSongCount(1,4)==MM_SUCCESS);
+    assert(manager.MMAddToSongCount(1,5)==MM_INVALID_INPUT);
+    assert(manager.MMAddToSongCount(1,0)==MM_SUCCESS);
     int streams = 0;
 
-    assert(manager.numberOfStreams(1,0,&streams)==MM_SUCCESS);
+    assert(manager.MMNumberOfStreams(1,0,&streams)==MM_SUCCESS);
     assert(streams == 1);
 
-    assert(manager.numberOfStreams(1,1,&streams)==MM_SUCCESS);
+    assert(manager.MMNumberOfStreams(1,1,&streams)==MM_SUCCESS);
     assert(streams == 0);
 
-    assert(manager.numberOfStreams(1,2,&streams)==MM_SUCCESS);
+    assert(manager.MMNumberOfStreams(1,2,&streams)==MM_SUCCESS);
     assert(streams == 0);
 
-    assert(manager.numberOfStreams(1,3,&streams)==MM_SUCCESS);
+    assert(manager.MMNumberOfStreams(1,3,&streams)==MM_SUCCESS);
     assert(streams == 0);
 
-    assert(manager.numberOfStreams(1,4,&streams)==MM_SUCCESS);
+    assert(manager.MMNumberOfStreams(1,4,&streams)==MM_SUCCESS);
     assert(streams == 1);
 
-    assert(manager.numberOfStreams(1,-1,&streams)==MM_INVALID_INPUT);
-    assert(manager.numberOfStreams(1,5,&streams)==MM_INVALID_INPUT);
-    MMResult GetRecommendedSongs(int numOfSongs,int* artists,int* songs);
+    assert(manager.MMNumberOfStreams(1,-1,&streams)==MM_INVALID_INPUT);
+    assert(manager.MMNumberOfStreams(1,5,&streams)==MM_INVALID_INPUT);
+    MMStatusType GetRecommendedSongs(int numOfSongs,int* artists,int* songs);
     int* artists = new int[5];
     int* songs = new int[5];
-    assert(manager.GetRecommendedSongs(5,artists,songs)==MM_SUCCESS);
+    assert(manager.MMgetRecommendedSongs(5,artists,songs)==MM_SUCCESS);
     assert(artists[0]==1);
     assert(artists[1]==1);
     assert(artists[2]==1);
