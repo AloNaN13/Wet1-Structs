@@ -81,7 +81,7 @@ public:
     StreamListNode* getNodeNext(StreamListNode* node) { return node->getNextNode();};
 
 
-    StreamListResult insertNode(StreamListNode* curr_node, AvlTree<AvlTree<int,int>*,int>& stream_artists, int& num_of_streams);
+    StreamListResult insertNode(StreamListNode* curr_node, AvlTree<AvlTree<int,int>*,int>& stream_artists, int num_of_streams);
     StreamListResult removeNode(StreamListNode* node);
 
 };
@@ -103,7 +103,7 @@ StreamList::~StreamList(){
 
 
 // inserts after the curr_node
-StreamListResult StreamList::insertNode(StreamListNode* curr_node, AvlTree<AvlTree<int,int>*,int>& stream_artists, int& num_of_streams) {
+StreamListResult StreamList::insertNode(StreamListNode* curr_node, AvlTree<AvlTree<int,int>*,int>& stream_artists, int num_of_streams) {
 
     // check if num_of_streams exists?
     /*

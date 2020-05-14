@@ -32,8 +32,8 @@ public:
     MusicManager& operator=(const MusicManager& music_manager) = default;
 
     //methods
-    StreamList& GetListOfStreams() {return this->list_of_streams;};
-    AvlTree<Artist,int>& GetArtistsTree() {return this->artists_tree;};
+    StreamList& MMGetListOfStreams() {return this->list_of_streams;};
+    AvlTree<Artist,int>& MMGetArtistsTree() {return this->artists_tree;};
 
 
     MMStatusType MMAddArtist(int artistID, int numOfSongs);
@@ -62,14 +62,13 @@ MMStatusType MusicManager:: MMAddArtist( int artistID, int numOfSongs){
         return MM_INVALID_INPUT;
     }
 
-    AvlTree<Artist,int>& tree = this.GetArtistsTree();
+    AvlTree<Artist,int>& tree = this->MMGetArtistsTree();
     if(tree.findKeyAlreadyExists(artistID)){
         return MM_FAILURE;
     }
-    Artist& artist_to_add = Artist(artistID, numOfSongs);
+    Artist artist_to_add = Artist(artistID, numOfSongs);
 
-
-    StreamList& list = this->GetListOfStreams();
+    StreamList& list = this->MMGetListOfStreams();
     StreamListNode* zero_streams_node = list.GetListFirstNode();
     // all songs now point to the "0" streams node
     for(int i = 0; i < artist_to_add.GetTotalNumOfSongs(); i++){
@@ -81,8 +80,8 @@ MMStatusType MusicManager:: MMAddArtist( int artistID, int numOfSongs){
 
     // insert pointer to the artist in "0" node AVLTree
     AvlTree<AvlTree<int,int>*,int>& node_tree = zero_streams_node->getNodeAvlTree();
-    node_tree.insert((&(*(tree.getElementptr(artistID))->GetNumOfStreamsTree())),artistID);
-    
+    node_tree.insert((tree.getElementptr(artistID)->GetNumOfStreamsTree().getFirst()),artistID);
+
     return MM_SUCCESS;
 
 }
@@ -98,7 +97,7 @@ MMStatusType MusicManager::MMRemoveArtist(int artistID){
         return MM_INVALID_INPUT;
     }
 
-    AvlTree<Artist,int>& tree = this.GetArtistsTree();
+    AvlTree<Artist,int>& tree = this->MMGetArtistsTree();
     if(!(tree.findKeyAlreadyExists(artistID))){
         return MM_FAILURE;
     }
@@ -110,8 +109,8 @@ MMStatusType MusicManager::MMRemoveArtist(int artistID){
         AvlTree<AvlTree<int,int>*,int>& node_tree = num_node->getNodeAvlTree();
         node_tree.remove(artistID);
         if(i != 0){
-            if(node_tree.getFirst == nullptr){
-                this->GetListOfStreams().removeNode(&num_node);
+            if(node_tree.getFirst() == nullptr){
+                this->MMGetListOfStreams().removeNode(num_node);
             }
         }
         artist.SetStreamsNumForSong(i,nullptr);
@@ -143,7 +142,7 @@ MMStatusType  MusicManager::MMAddToSongCount(int artistID, int songID){
         return MM_INVALID_INPUT;
     }
 
-    AvlTree<Artist,int>& tree = this.GetArtistsTree();
+    AvlTree<Artist,int>& tree = this->MMGetArtistsTree();
     if(tree.findKeyAlreadyExists(artistID)){
         return MM_FAILURE;
     }
@@ -153,14 +152,14 @@ MMStatusType  MusicManager::MMAddToSongCount(int artistID, int songID){
     if(artist.GetTotalNumOfSongs()<=songID){
         return MM_INVALID_INPUT;
     }
-    StreamList& list_of_streams = this->GetListOfStreams();
+    StreamList& list_of_streams = this->MMGetListOfStreams();
     AvlTree<int,int>* node_to_point_to = nullptr;
     StreamListNode* stream_list_node_to_point_to = nullptr;
 
     //change in the ArtistsTree
     AvlTree<AvlTree<int,int>,int>& num_of_streams_tree = artist.GetNumOfStreamsTree();
     StreamListNode* num_of_streams_list_node = artist.GetSongNumOfStreamsNode(songID);
-    int songs_num_of_streams = *(num_of_streams_list_node)->GetNodeNumOfStreams();
+    int songs_num_of_streams = num_of_streams_list_node->GetNodeNumOfStreams();
     // remove song node
     AvlTree<int,int>& num_of_streams_tree_node = *(num_of_streams_tree.getElementptr(songs_num_of_streams));
     num_of_streams_tree_node.remove(songID);
@@ -169,10 +168,10 @@ MMStatusType  MusicManager::MMAddToSongCount(int artistID, int songID){
     }
     // insert song to the next num_of_streams node
     if(num_of_streams_tree.findKeyAlreadyExists(songs_num_of_streams+1)){
-        *(num_of_streams_tree.getElementptr(songs_num_of_streams+1))->insert(songID,songID);
+        num_of_streams_tree.getElementptr(songs_num_of_streams+1)->insert(songID,songID);
     }
-    else if{
-        AvlTree<int,int>& new_songs_tree = AvlTree<int,int>();
+    else{
+        AvlTree<int,int> new_songs_tree = AvlTree<int,int>();
         new_songs_tree.insert(songID,songID);
         num_of_streams_tree.insert(new_songs_tree,songs_num_of_streams+1);
         node_to_point_to = num_of_streams_tree.getElementptr(songs_num_of_streams+1);
@@ -203,22 +202,22 @@ MMStatusType  MusicManager::MMAddToSongCount(int artistID, int songID){
 
     // change in the List
     StreamListNode* num_of_streams_list_next_node = num_of_streams_list_node->getNextNode();
-    if(*(num_of_streams_list_next_node)->GetNodeNumOfStreams() == songs_num_of_streams+1){
+    if(num_of_streams_list_next_node->GetNodeNumOfStreams() == songs_num_of_streams+1){
         AvlTree<AvlTree<int,int>*,int>& num_of_streams_list_next_node_tree =
-                *(num_of_streams_list_next_node)->getNodeAvlTree();
+                num_of_streams_list_next_node->getNodeAvlTree();
         num_of_streams_list_next_node_tree.insert(node_to_point_to,artistID);
         stream_list_node_to_point_to = num_of_streams_list_next_node;
     }
-    else if{
+    else{
         AvlTree<AvlTree<int,int>*,int>& new_node_tree = *(new AvlTree<AvlTree<int,int>*,int>());
         new_node_tree.insert(node_to_point_to,artistID);
         list_of_streams.insertNode(num_of_streams_list_node,new_node_tree,songs_num_of_streams+1);
         stream_list_node_to_point_to = num_of_streams_list_node->getNextNode();
     }
     // remove the artist's node from the original node's tree
-    AvlTree<AvlTree<int,int>*,int>& num_of_streams_list_node_tree = *(num_of_streams_list_node)->getNodeAvlTree();
+    AvlTree<AvlTree<int,int>*,int>& num_of_streams_list_node_tree = num_of_streams_list_node->getNodeAvlTree();
     num_of_streams_list_node_tree.remove(artistID);
-    if(*(num_of_streams_list_node)->GetNodeNumOfStreams() != 0){
+    if(num_of_streams_list_node->GetNodeNumOfStreams() != 0){
         if(num_of_streams_list_node_tree.getFirst() == nullptr){
             list_of_streams.removeNode(num_of_streams_list_node);
         }
@@ -278,7 +277,7 @@ MMStatusType  MusicManager:: MMNumberOfStreams(int artistID, int songID, int* st
         return MM_INVALID_INPUT;
     }
 
-    AvlTree<Artist,int>& tree = this.GetArtistsTree();
+    AvlTree<Artist,int>& tree = this->MMGetArtistsTree();
     if(tree.findKeyAlreadyExists(artistID)){
         return MM_FAILURE;
     }
@@ -287,7 +286,7 @@ MMStatusType  MusicManager:: MMNumberOfStreams(int artistID, int songID, int* st
     if(artist.GetTotalNumOfSongs()<=songID){
         return MM_INVALID_INPUT;
     }
-    StreamListNode* num_node = artist.GetSongNumOfStreams(songID);
+    StreamListNode* num_node = artist.GetSongNumOfStreamsNode(songID);
 
     int num = num_node->GetNodeNumOfStreams();
     *streams = num;
