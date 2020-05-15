@@ -1,9 +1,4 @@
-/*
- * testAVLTree.cpp
- *
- *  Created on: 19 ���� 2013
- *      Author: shirel
- */
+
 
 #include "AVLTree.h"
 #include <vector>
@@ -16,8 +11,14 @@
 #define addNode insert
 #define removeNode remove
 
+#include "AvlTree.h"
+#include "AVL_tests.h"
 
 int main(){
+    //AVL_Basics();
+    AVL_TESTS();
+
+    /*
     AvlTree<int, int> tree;
 
     std::vector<int> vector;
@@ -42,6 +43,6 @@ int main(){
         }
         tree.clear();
     }
-    return 0;
+    return 0;*/
 }
 

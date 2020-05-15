@@ -42,15 +42,15 @@ void AVL_Basics(){
     std::cout << "Starting test 3" << std::endl;
     AVL_test3(10000);
     std::cout << "test 3 successful" << std::endl;
-*/
+
     std::cout << "Starting test 4" << std::endl;
     AVL_test4(10000);
     std::cout << "test 4 successful" << std::endl;
-
+*/
     std::cout << "Starting test 5" << std::endl;
     AVL_test5(10000);
     std::cout << "test 5 successful" << std::endl;
-
+/*
     std::cout << "Starting test 6" << std::endl;
     AVL_test6();
     std::cout << "test 6 successful" << std::endl;
@@ -60,7 +60,7 @@ void AVL_Basics(){
     std::cout << "you've passed the general test!" << std::endl;
     std::cout << "::::::::::::::::::::::::::::::::" << std::endl;
 
-
+*/
 }
 
 
@@ -82,7 +82,9 @@ void AVL_test5(int size){
     for(int i=0;i<size;i++) occ[i]=false;
     AvlTreeResult result;
 
-    for(int i=0;i<size*100;i++){
+   // for(int i=0;i<size*100;i++){
+    for(int i=0;i<100;i++){
+        printf("%d\n",i);
         int index = rand()%size;
         int elem = rand();
         if(rand()%2){
@@ -112,6 +114,40 @@ void AVL_test5(int size){
 
         }
     }
+    tree.printTree();
+    for(int i=355;i<0;i++){
+        printf("%d\n",i);
+        int index = rand()%size;
+        int elem = rand();
+        if(rand()%2){
+            //insert
+            if(occ[index]){
+                result=tree.insert(elem,index);
+                assert(result==AVL_KEY_ALREADY_EXISTS);
+            }
+            else{
+                result=tree.insert(elem,index);
+                assert(result==AVL_SUCCESS);
+                array[index]=elem;
+                occ[index]=true;
+            }
+        }
+        else{
+            //remove
+            if(occ[index]){
+                result=tree.remove(index);
+                assert(result==AVL_SUCCESS);
+                occ[index]=false;
+            }
+            else{
+                result=tree.remove(index);
+                assert(result==AVL_KEY_DOESNT_EXISTS);
+            }
+
+        }
+    }
+
+
     delete[](array);
     delete[](occ);
 }

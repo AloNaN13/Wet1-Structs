@@ -10,6 +10,7 @@
 
 #include <cmath>
 #include <iostream>
+#include <assert.h>
 using namespace std;
 
 typedef enum AvlTreeResult_t{AVL_KEY_ALREADY_EXISTS,AVL_SUCCESS,AVL_ALLOCATION_ERROR
@@ -62,8 +63,8 @@ private:
     Node* removeBinarySearch(Node* node_to_del);
     void InsertNode(Node &newNode);
     void deleteAllNodes(Node* node);
-    void Balance2(Node& starting_balance_node);
-    void balanceAfterRemove(Node& parent_of_deleted);
+    void BalanceInsert(Node& starting_balance_node);
+    void BalanceRemove(Node* node);
     void rotateLeft(Node& node);
     void rotateRight(Node& node);
     void fixHeightAfterInsert(Node& inserted_node);
@@ -87,6 +88,7 @@ public:
         return iterator->key;
     }
     bool findKeyAlreadyExists(const Key& key);
+    //newt 2 functions for testing
     void printTree(){
         if(root){
            printTreeInOrder(root) ;
@@ -112,7 +114,7 @@ void AvlTree<Element,Key>:: printTreeInOrder(Node* startingNode){
     }
     printTreeInOrder(startingNode->left_son);
 
-    cout<< (int)startingNode->data << " BF: "<< startingNode->getBalanceFactor()<< " H: "<<startingNode->getHeight()<<"\n";
+    cout<< (int)startingNode->key << " BF: "<< startingNode->getBalanceFactor()<< " H: "<<startingNode->getHeight()<<"\n";
     printTreeInOrder(startingNode->right_son);
 
 
@@ -129,6 +131,10 @@ AvlTree<Element,Key>::AvlTree(Element *arrElement, Key *arrKey, int num):root(nu
         height++;
     }*/
     root=buildTreeFromArrays(arrElement,arrKey,num);
+    first=root;
+    while(first){
+        first=first->left_son;
+    }
    //create a full tree with height height
 }
 template <class Element,class Key>
@@ -457,7 +463,7 @@ void AvlTree<Element,Key>::InsertNode(Node &newNode){
                 tmp->right_son=&newNode;
                 newNode.parent=tmp;
                 fixHeightAfterInsert(newNode);
-                Balance2(newNode);
+                BalanceInsert(newNode);
                 return;
             }
             tmp=tmp->right_son;
@@ -467,7 +473,7 @@ void AvlTree<Element,Key>::InsertNode(Node &newNode){
                 tmp->left_son=&newNode;
                 newNode.parent=tmp;
                 fixHeightAfterInsert(newNode);
-                Balance2(newNode);
+                BalanceInsert(newNode);
                 //tmp->hl=tmp->hl+1;
 
                 return;
@@ -595,6 +601,8 @@ void AvlTree<Element,Key>::swapNodes(Node* node_to_del,Node* next_by_value) {
             return;
         }
     }
+
+
     next_by_value->hr=node_to_del->hr;
     next_by_value->hl=node_to_del->hl;
     Node *parent=next_by_value->getParent();
@@ -612,7 +620,7 @@ void AvlTree<Element,Key>::swapNodes(Node* node_to_del,Node* next_by_value) {
     node_to_del->right_son=parent->left_son;
     parent->left_son=node_to_del;
     if(node_to_del->parent){
-        if(node_to_del->parent->left_son=node_to_del){
+        if(node_to_del->parent->left_son==node_to_del){
             node_to_del->parent->left_son=next_by_value;
         }
         else{
@@ -632,7 +640,7 @@ void AvlTree<Element,Key>::swapNodes(Node* node_to_del,Node* next_by_value) {
 
 
 template <class Element,class Key>
-void AvlTree<Element,Key>:: Balance2(Node& insertedNode){
+void AvlTree<Element,Key>:: BalanceInsert(Node& insertedNode){
    Node *p=insertedNode.parent;
    Node *tmp=&insertedNode;
    int balance_factor=0;
@@ -660,48 +668,9 @@ void AvlTree<Element,Key>:: Balance2(Node& insertedNode){
        }
        tmp=tmp->parent;
    }
-
  }
 
 
-template <class Element,class Key>
-void AvlTree<Element,Key>::balanceAfterRemove(Node &parent_of_deleted) {
-    Node *tmp=&parent_of_deleted;
-    if(parent_of_deleted.right_son!= nullptr){
-        tmp=parent_of_deleted.right_son;
-    }
-    else if(parent_of_deleted.left_son!= nullptr){
-        tmp=parent_of_deleted.left_son;
-    }
-    Node *p=&parent_of_deleted;
-
-    int balance_factor=0;
-    while (tmp!=root){
-        balance_factor=p->getBalanceFactor();
-        if(balance_factor==2){
-            if(p->left_son && p->left_son->getBalanceFactor()<0){
-                rotateLeft(*(p->left_son));
-                fixHeightAfterRotation(p->left_son);
-            }
-            rotateRight(*p);
-            fixHeightAfterRotation(p);
-        }
-        else if(balance_factor==-2){
-            if(p->right_son &&p->right_son->getBalanceFactor()>0){
-                rotateRight(*(p->right_son));
-                fixHeightAfterRotation(p->right_son);
-            }
-            rotateLeft(*p);
-            fixHeightAfterRotation(p);
-            return;
-        }
-        if(tmp!=root) {
-            tmp = tmp->parent;
-        }
-    }
-
-
-}
 
 
 
@@ -764,17 +733,33 @@ AvlTreeResult AvlTree<Element,Key>:: remove (const Key& key){
     bool setFirst=(&node_to_del==first);
     Node* parent=removeBinarySearch(&node_to_del);
 
-    //need toBalance
+   // assert(findKeyAlreadyExists(key)== false);
+
 
     if(parent== nullptr){
         return AVL_SUCCESS;
     }
 
     while (parent!= nullptr){
-
-        balanceAfterRemove(*parent);
+        if(parent->left_son){
+            parent->hl=parent->left_son->getHeight();
+        }
+        else{
+            parent->hl=0;
+        }
+        if(parent->right_son){
+            parent->hr=parent->right_son->getHeight();
+        }
+        else{
+            parent->hr=0;
+        };
+        BalanceRemove(parent);
+        //Balance2(*parent);
+        //balanceAfterRemove(*parent);
         parent=parent->parent;
     }
+//    balanceAfterRemove(*parent);
+
     if(setFirst){
         if(root== nullptr){
             return AVL_SUCCESS;
@@ -787,5 +772,36 @@ AvlTreeResult AvlTree<Element,Key>:: remove (const Key& key){
     }
     return AVL_SUCCESS;
 }
+
+
+template <class Element,class Key>
+void AvlTree<Element,Key>::BalanceRemove(Node *node) {
+    if(!node){
+        return;
+    }
+    int balance_factor=0;
+    Node* p=node->parent;
+    balance_factor=p->getBalanceFactor();
+    if(balance_factor==2){
+        if(p->left_son->getBalanceFactor()<0){
+            rotateLeft(*(p->left_son));
+            fixHeightAfterRotation(p->left_son);
+        }
+        rotateRight(*p);
+        fixHeightAfterRotation(p);
+        return;
+    }
+    if(balance_factor==-2){
+        if(p->right_son->getBalanceFactor()>0){
+            rotateRight(*(p->right_son));
+            fixHeightAfterRotation(p->right_son);
+        }
+        rotateLeft(*p);
+        fixHeightAfterRotation(p);
+        return;
+    }
+}
+
+
 
 #endif //MIVNE_AVLTREE_H
