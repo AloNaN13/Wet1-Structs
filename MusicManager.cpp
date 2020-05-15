@@ -65,13 +65,13 @@ MMStatusType MusicManager::MMRemoveArtist(int artistID){
 
     // COMPLEXITY GOOD ENOUGH? NO NEED TO MAKE NULLS?
     StreamListNode* num_node = nullptr;
-    AvlTree<AvlTree<int,int>*,int>& node_tree = num_node->getNodeAvlTree();
     for(int i = 0; i < artist.GetTotalNumOfSongs(); i++){
         num_node = artist.GetSongNumOfStreamsNode(i);
-        node_tree = num_node->getNodeAvlTree();
-        node_tree.remove(artistID);
-        if(i != 0){
-            if(node_tree.getFirst() == nullptr){
+        AvlTree<AvlTree<int,int>*,int>& num_node_tree = num_node->getNodeAvlTree();
+        num_node_tree.remove(artistID);
+        if(num_node->GetNodeNumOfStreams() != 0){
+            void* x = num_node_tree.getFirst();
+            if(num_node_tree.getFirst() == nullptr){
                 this->MMGetListOfStreams().removeNode(num_node);
             }
         }
