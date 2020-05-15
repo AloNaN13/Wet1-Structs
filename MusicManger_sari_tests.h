@@ -192,23 +192,19 @@ void MusicManger_test1(){
 
     assert(manager.MMRemoveArtist(1)==MM_FAILURE);
     assert(manager.MMAddArtist(1,5)==MM_SUCCESS);
-
     assert(manager.MMAddArtist(1,3)==MM_FAILURE);
     assert(manager.MMAddArtist(1,7)==MM_FAILURE);
     assert(manager.MMAddToSongCount(1,6)==MM_INVALID_INPUT);
-    std::cout << "GOT HERE 1" << std::endl;
-
     assert(manager.MMAddToSongCount(1,4)==MM_SUCCESS);
-    std::cout << "GOT HERE 2" << std::endl;
-
     assert(manager.MMAddToSongCount(1,5)==MM_INVALID_INPUT);
     assert(manager.MMAddToSongCount(1,0)==MM_SUCCESS);
     int streams = 0;
-    std::cout << "GOT HERE" << std::endl;
+    std::cout << "GOT HERE 1" << std::endl;
 
 
     assert(manager.MMNumberOfStreams(1,0,&streams)==MM_SUCCESS);
     assert(streams == 1);
+    std::cout << "GOT HERE" << std::endl;
 
     assert(manager.MMNumberOfStreams(1,1,&streams)==MM_SUCCESS);
     assert(streams == 0);

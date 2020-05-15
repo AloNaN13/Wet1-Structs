@@ -119,7 +119,6 @@ MMStatusType  MusicManager::MMAddToSongCount(int artistID, int songID){
     AvlTree<int,int>* node_to_point_to = nullptr;
     StreamListNode* stream_list_node_to_point_to = nullptr;
 
-    std::cout << "test GOT HERE 1" << std::endl;
 
     //change in the ArtistsTree
     AvlTree<AvlTree<int,int>,int>& num_of_streams_tree = artist.GetNumOfStreamsTree();
@@ -128,7 +127,7 @@ MMStatusType  MusicManager::MMAddToSongCount(int artistID, int songID){
     // remove song node
     AvlTree<int,int>& num_of_streams_tree_node = *(num_of_streams_tree.getElementptr(songs_num_of_streams));
     num_of_streams_tree_node.remove(songID);
-    std::cout << "test GOT HERE 2" << std::endl;
+    std::cout << "test GOT HERE 1" << std::endl;
 
     if(num_of_streams_tree_node.getFirst() == nullptr){
         num_of_streams_tree.remove(songs_num_of_streams);
@@ -143,6 +142,7 @@ MMStatusType  MusicManager::MMAddToSongCount(int artistID, int songID){
         num_of_streams_tree.insert(new_songs_tree,songs_num_of_streams+1);
         node_to_point_to = num_of_streams_tree.getElementptr(songs_num_of_streams+1);
     }
+    std::cout << "test GOT HERE 2" << std::endl;
 
     /* OLD CODE
     AvlTree<int,int>& num_of_streams_tree_next_node = *(num_of_streams_tree.getNext()) // HOW TO USE GetNext?
@@ -169,7 +169,7 @@ MMStatusType  MusicManager::MMAddToSongCount(int artistID, int songID){
 
     // change in the List
     StreamListNode* num_of_streams_list_next_node = num_of_streams_list_node->getNextNode();
-    if(num_of_streams_list_next_node->GetNodeNumOfStreams() == songs_num_of_streams+1){
+    if(num_of_streams_list_next_node != nullptr && num_of_streams_list_next_node->GetNodeNumOfStreams() == songs_num_of_streams+1){
         AvlTree<AvlTree<int,int>*,int>& num_of_streams_list_next_node_tree =
                 num_of_streams_list_next_node->getNodeAvlTree();
         num_of_streams_list_next_node_tree.insert(node_to_point_to,artistID);

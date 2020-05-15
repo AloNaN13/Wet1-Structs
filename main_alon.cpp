@@ -12,8 +12,9 @@
 #include <chrono>
 #include <algorithm>
 
-#include "MusicManger_sari_tests.h"
 
+//#include "MusicManager.h"
+#include "MusicManger_sari_tests.h"
 
 
 #define addNode insert
@@ -21,6 +22,8 @@
 
 
 int main(){
+    //Artist art(13,3);
+
     MusicMangerTest();
     return 0;
 }
