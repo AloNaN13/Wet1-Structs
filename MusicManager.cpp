@@ -42,6 +42,9 @@ MMStatusType MusicManager:: MMAddArtist( int artistID, int numOfSongs){
     AvlTree<AvlTree<int,int>*,int>& node_tree = zero_streams_node->getNodeAvlTree();
     node_tree.insert((tree.getElementptr(artistID)->GetNumOfStreamsTree().getFirst()),artistID);
 
+
+
+    this->totalNumOfSongs=this->totalNumOfSongs+numOfSongs;
     return MM_SUCCESS;
 
 }
@@ -57,7 +60,7 @@ MMStatusType MusicManager::MMRemoveArtist(int artistID){
         return MM_INVALID_INPUT;
     }
 
-    AvlTree<Artist,int>& tree = this->MMGetArtistsTree();
+    AvlTree<Artist,int> tree = this->MMGetArtistsTree();
     if(!(tree.findKeyAlreadyExists(artistID))){
         return MM_FAILURE;
     }
@@ -77,8 +80,10 @@ MMStatusType MusicManager::MMRemoveArtist(int artistID){
         }
         artist.SetStreamsNumForSong(i,nullptr);
     }
+    int num_songs_of_artist=artist.GetTotalNumOfSongs();
     tree.remove(artistID);
 
+    this->totalNumOfSongs=this->totalNumOfSongs-num_songs_of_artist;
     return MM_SUCCESS;
 
     // go to songs list
