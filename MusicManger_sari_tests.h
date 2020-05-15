@@ -199,12 +199,10 @@ void MusicManger_test1(){
     assert(manager.MMAddToSongCount(1,5)==MM_INVALID_INPUT);
     assert(manager.MMAddToSongCount(1,0)==MM_SUCCESS);
     int streams = 0;
-    std::cout << "GOT HERE 1" << std::endl;
 
 
     assert(manager.MMNumberOfStreams(1,0,&streams)==MM_SUCCESS);
     assert(streams == 1);
-    std::cout << "GOT HERE" << std::endl;
 
     assert(manager.MMNumberOfStreams(1,1,&streams)==MM_SUCCESS);
     assert(streams == 0);
@@ -220,6 +218,9 @@ void MusicManger_test1(){
 
     assert(manager.MMNumberOfStreams(1,-1,&streams)==MM_INVALID_INPUT);
     assert(manager.MMNumberOfStreams(1,5,&streams)==MM_INVALID_INPUT);
+
+    std::cout << "GOT HERE 1" << std::endl;
+
     MMStatusType GetRecommendedSongs(int numOfSongs,int* artists,int* songs);
     int* artists = new int[5];
     int* songs = new int[5];

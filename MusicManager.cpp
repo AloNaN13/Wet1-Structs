@@ -127,7 +127,6 @@ MMStatusType  MusicManager::MMAddToSongCount(int artistID, int songID){
     // remove song node
     AvlTree<int,int>& num_of_streams_tree_node = *(num_of_streams_tree.getElementptr(songs_num_of_streams));
     num_of_streams_tree_node.remove(songID);
-    std::cout << "test GOT HERE 1" << std::endl;
 
     if(num_of_streams_tree_node.getFirst() == nullptr){
         num_of_streams_tree.remove(songs_num_of_streams);
@@ -142,7 +141,6 @@ MMStatusType  MusicManager::MMAddToSongCount(int artistID, int songID){
         num_of_streams_tree.insert(new_songs_tree,songs_num_of_streams+1);
         node_to_point_to = num_of_streams_tree.getElementptr(songs_num_of_streams+1);
     }
-    std::cout << "test GOT HERE 2" << std::endl;
 
     /* OLD CODE
     AvlTree<int,int>& num_of_streams_tree_next_node = *(num_of_streams_tree.getNext()) // HOW TO USE GetNext?
@@ -240,7 +238,7 @@ MMStatusType  MusicManager::MMAddToSongCount(int artistID, int songID){
 MMStatusType  MusicManager:: MMNumberOfStreams(int artistID, int songID, int* streams){
     // return ERRORS
 
-    if(artistID<=0 ||  streams == nullptr){
+    if(artistID<=0 ||  streams == nullptr || songID<0){
         return MM_INVALID_INPUT;
     }
 
