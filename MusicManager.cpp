@@ -64,9 +64,11 @@ MMStatusType MusicManager::MMRemoveArtist(int artistID){
     Artist& artist = *(tree.getElementptr(artistID));
 
     // COMPLEXITY GOOD ENOUGH? NO NEED TO MAKE NULLS?
+    StreamListNode* num_node = nullptr;
+    AvlTree<AvlTree<int,int>*,int>& node_tree = num_node->getNodeAvlTree();
     for(int i = 0; i < artist.GetTotalNumOfSongs(); i++){
-        StreamListNode* num_node = artist.GetSongNumOfStreamsNode(i);
-        AvlTree<AvlTree<int,int>*,int>& node_tree = num_node->getNodeAvlTree();
+        num_node = artist.GetSongNumOfStreamsNode(i);
+        node_tree = num_node->getNodeAvlTree();
         node_tree.remove(artistID);
         if(i != 0){
             if(node_tree.getFirst() == nullptr){
@@ -117,6 +119,8 @@ MMStatusType  MusicManager::MMAddToSongCount(int artistID, int songID){
     AvlTree<int,int>* node_to_point_to = nullptr;
     StreamListNode* stream_list_node_to_point_to = nullptr;
 
+    std::cout << "test GOT HERE 1" << std::endl;
+
     //change in the ArtistsTree
     AvlTree<AvlTree<int,int>,int>& num_of_streams_tree = artist.GetNumOfStreamsTree();
     StreamListNode* num_of_streams_list_node = artist.GetSongNumOfStreamsNode(songID);
@@ -124,6 +128,8 @@ MMStatusType  MusicManager::MMAddToSongCount(int artistID, int songID){
     // remove song node
     AvlTree<int,int>& num_of_streams_tree_node = *(num_of_streams_tree.getElementptr(songs_num_of_streams));
     num_of_streams_tree_node.remove(songID);
+    std::cout << "test GOT HERE 2" << std::endl;
+
     if(num_of_streams_tree_node.getFirst() == nullptr){
         num_of_streams_tree.remove(songs_num_of_streams);
     }

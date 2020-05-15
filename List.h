@@ -63,7 +63,9 @@ private:
 
 
 public:
-    StreamList(): first_node(new StreamListNode(0)), last_node(nullptr) {};
+    StreamList(): first_node(new StreamListNode(0)), last_node(nullptr) {
+        last_node = first_node;
+    };
     ~StreamList(); // not default?
 
     void deleteAllStreamNodes(StreamListNode* node);
@@ -78,8 +80,8 @@ public:
     void SetListLastNode(StreamListNode* node) {this->last_node = node;}; // void?
 
 
-    StreamListNode* getNodePrev(StreamListNode* node) { return node->getPrevNode();};
-    StreamListNode* getNodeNext(StreamListNode* node) { return node->getNextNode();};
+    //StreamListNode* getNodePrev(StreamListNode* node) { return node->getPrevNode();};
+    //StreamListNode* getNodeNext(StreamListNode* node) { return node->getNextNode();};
 
 
     StreamListResult insertNode(StreamListNode* curr_node, AvlTree<AvlTree<int,int>*,int>& stream_artists, int num_of_streams);

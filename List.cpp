@@ -42,6 +42,10 @@ StreamListResult StreamList::insertNode(StreamListNode* curr_node, AvlTree<AvlTr
     new_node->SetPrevNode(curr_node);
     curr_node->SetNextNode(new_node);
 
+    if(curr_node == last_node){
+        last_node = curr_node->getNextNode();
+    }
+
     return SL_SUCCESS;
 
 }
@@ -56,6 +60,9 @@ StreamListResult StreamList::removeNode(StreamListNode* node) {
 
     //check the following pointers use
 
+    if(node == last_node){
+        last_node = node->getPrevNode();
+    }
     node->getPrevNode()->SetNextNode(node->getNextNode());
     node->getNextNode()->SetPrevNode(node->getPrevNode());
 
