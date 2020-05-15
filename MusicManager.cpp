@@ -73,7 +73,6 @@ MMStatusType MusicManager::MMRemoveArtist(int artistID){
         AvlTree<AvlTree<int,int>*,int>& num_node_tree = num_node->getNodeAvlTree();
         num_node_tree.remove(artistID);
         if(num_node->GetNodeNumOfStreams() != 0){
-            void* x = num_node_tree.getFirst();
             if(num_node_tree.getFirst() == nullptr){
                 this->MMGetListOfStreams().removeNode(num_node);
             }
@@ -133,7 +132,9 @@ MMStatusType  MusicManager::MMAddToSongCount(int artistID, int songID){
     AvlTree<int,int>& num_of_streams_tree_node = *(num_of_streams_tree.getElementptr(songs_num_of_streams));
     num_of_streams_tree_node.remove(songID);
 
+    bool should_remove_stream_node = false;
     if(num_of_streams_tree_node.getFirst() == nullptr){
+        should_remove_stream_node = true;
         num_of_streams_tree.remove(songs_num_of_streams);
     }
     // insert song to the next num_of_streams node
@@ -185,13 +186,16 @@ MMStatusType  MusicManager::MMAddToSongCount(int artistID, int songID){
         stream_list_node_to_point_to = num_of_streams_list_node->getNextNode();
     }
     // remove the artist's node from the original node's tree
-    AvlTree<AvlTree<int,int>*,int>& num_of_streams_list_node_tree = num_of_streams_list_node->getNodeAvlTree();
-    num_of_streams_list_node_tree.remove(artistID);
-    if(num_of_streams_list_node->GetNodeNumOfStreams() != 0){
-        if(num_of_streams_list_node_tree.getFirst() == nullptr){
-            list_of_streams.removeNode(num_of_streams_list_node);
+    if(should_remove_stream_node == true){
+        AvlTree<AvlTree<int,int>*,int>& num_of_streams_list_node_tree = num_of_streams_list_node->getNodeAvlTree();
+        num_of_streams_list_node_tree.remove(artistID);
+        if(num_of_streams_list_node->GetNodeNumOfStreams() != 0){
+            if(num_of_streams_list_node_tree.getFirst() == nullptr){
+                list_of_streams.removeNode(num_of_streams_list_node);
+            }
         }
     }
+
 
     // change in the songs array
     artist.SetStreamsNumForSong(songID,stream_list_node_to_point_to);

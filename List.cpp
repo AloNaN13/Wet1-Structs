@@ -60,11 +60,15 @@ StreamListResult StreamList::removeNode(StreamListNode* node) {
 
     //check the following pointers use
 
-    if(node == last_node){
+    if(node->getNextNode() == nullptr){
         last_node = node->getPrevNode();
     }
-    node->getPrevNode()->SetNextNode(node->getNextNode());
-    node->getNextNode()->SetPrevNode(node->getPrevNode());
+    else{
+        node->getNextNode()->SetPrevNode(node->getPrevNode());
+    }
+    if(node != first_node){
+        node->getPrevNode()->SetNextNode(node->getNextNode());
+    }
 
     delete(node);
     return SL_SUCCESS;
