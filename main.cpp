@@ -16,9 +16,17 @@
 #include "MusicManger_sari_tests.h"
 #include "MusicManager.h"
 int main(){
-    Artist av(4,4);
+    MusicMangerTest();
+   /*
+  Artist av(4,4);
   MusicManager manager=*new MusicManager();
-  manager.MMAddArtist(1,1);
+  manager.MMAddArtist(4,4);
+  manager.MMAddToSongCount(4,0);
+  //manager.MMRemoveArtist(4);
+  manager.MMAddArtist(2,2);
+  manager.MMAddArtist(1,5);
+*/
+
 
   printf("hello\n");
 
