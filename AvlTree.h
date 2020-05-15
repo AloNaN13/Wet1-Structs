@@ -131,7 +131,11 @@ void AvlTree<Element,Key>:: printTreeInOrder(Node* startingNode){
 template <class Element,class Key>
 AvlTree<Element,Key>::AvlTree(const AvlTree& other):root(nullptr),iterator(nullptr),first(nullptr){
     //Node* other_root=other.getRoot();
-    copyNodes(root,other.getRoot());
+    root=copyNodes(root,other.getRoot());
+    first=root;
+    while (first &&first->left_son){
+        first=first->left_son;
+    }
     //root=new Node(other_root->data,other_root->key);
 
 }
@@ -149,6 +153,9 @@ typename AvlTree<Element,Key>::Node* AvlTree<Element,Key>::copyNodes(Node* curre
     if(current->left_son){
         current->left_son->parent=current;
     }
+    current->hr=Node_to_copy->hr;
+    current->hl=Node_to_copy->hl;
+    return current;
 
 }
 

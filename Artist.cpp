@@ -5,8 +5,7 @@
 #include "Artist.h"
 
 
-Artist::Artist(int id, int num_of_songs) : full_songs_list((new StreamListNode*[num_of_songs])),
-                                            num_of_streams_tree(*(new AvlTree<AvlTree<int,int>,int>())){
+Artist::Artist(int id, int num_of_songs) : full_songs_list((new StreamListNode*[num_of_songs])){
 
     artist_id = id;
     total_num_of_songs = num_of_songs;
@@ -18,11 +17,12 @@ Artist::Artist(int id, int num_of_songs) : full_songs_list((new StreamListNode*[
     for(int i = 0; i < num_of_songs; i++){
         songs_arr[i] = i;
     }
-    AvlTree<int,int>& songs_tree = *(new AvlTree<int,int>(songs_arr, songs_arr, num_of_songs));
+    AvlTree<int, int> tmp(songs_arr,songs_arr,num_of_songs);
+    //AvlTree<int,int>& songs_tree = *(new AvlTree<int,int>(songs_arr, songs_arr, num_of_songs));
     //delete[] songs_arr;
 
     // create AvlTree for streams_tree - with first node "0" for all the songs
-    num_of_streams_tree.insert(songs_tree,0);
+    num_of_streams_tree.insert(tmp,0);
 
 }
 
