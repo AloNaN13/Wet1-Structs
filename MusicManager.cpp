@@ -185,6 +185,7 @@ MMStatusType  MusicManager::MMAddToSongCount(int artistID, int songID){
         list_of_streams.insertNode(num_of_streams_list_node,new_node_tree,songs_num_of_streams+1);
         stream_list_node_to_point_to = num_of_streams_list_node->getNextNode();
     }
+
     // remove the artist's node from the original node's tree
 
     if(should_remove_stream_node == true){
@@ -303,15 +304,21 @@ MMStatusType MusicManager:: MMgetRecommendedSongs( int numOfSongs, int* artists,
             current_ArtistId=(current_Node_of_hearings->getNodeAvlTree()).getKey();
             while (song &&count<numOfSongs){
                 artists[count]=current_ArtistId;
-                songs[count]=(current_Node_of_hearings->getNodeAvlTree()).getKey();
+                songs[count]=songs_of_current_artist_with_num_streams->getKey();
 
                 count++;
                 song=songs_of_current_artist_with_num_streams->getNext();
             }
 
-            songs_of_current_artist_with_num_streams=*((current_Node_of_hearings->getNodeAvlTree()).getNext());
+            AvlTree<int,int>** tmp=(current_Node_of_hearings->getNodeAvlTree()).getNext();
+            if(tmp){
+                songs_of_current_artist_with_num_streams=*tmp;
+            } else{
+                songs_of_current_artist_with_num_streams= nullptr;
+            }
+           // songs_of_current_artist_with_num_streams=*((current_Node_of_hearings->getNodeAvlTree()).getNext());
         }
-        current_Node_of_hearings=current_Node_of_hearings->getNextNode();
+        current_Node_of_hearings=current_Node_of_hearings->getPrevNode();
     }
     return MM_SUCCESS;
 
