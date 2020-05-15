@@ -132,7 +132,7 @@ AvlTree<Element,Key>::AvlTree(Element *arrElement, Key *arrKey, int num):root(nu
     }*/
     root=buildTreeFromArrays(arrElement,arrKey,num);
     first=root;
-    while(first){
+    while(first && first->left_son){
         first=first->left_son;
     }
    //create a full tree with height height
