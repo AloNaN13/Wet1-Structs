@@ -43,14 +43,15 @@ void AVL_Basics(){
     AVL_test3(10000);
     std::cout << "test 3 successful" << std::endl;
 
+/*
     std::cout << "Starting test 4" << std::endl;
     AVL_test4(10000);
     std::cout << "test 4 successful" << std::endl;
-*/
+
     std::cout << "Starting test 5" << std::endl;
     AVL_test5(10000);
     std::cout << "test 5 successful" << std::endl;
-/*
+
     std::cout << "Starting test 6" << std::endl;
     AVL_test6();
     std::cout << "test 6 successful" << std::endl;
@@ -68,13 +69,14 @@ void AVL_Basics(){
 
 void AVL_test6() {
     AvlTree<int, int> tree;
-    tree.insert(1, 2);
+    tree.insert(2, 1);
     *tree.getElementptr(1) = 5;
     assert(*tree.getElementptr(1) == 5);
     int *elem = tree.getElementptr(1);
     *elem = 10;
     assert(*tree.getElementptr(1) == 10);
 }
+
 void AVL_test5(int size){
     AvlTree<int,int> tree;
     int *array = new int[size];
@@ -83,7 +85,7 @@ void AVL_test5(int size){
     AvlTreeResult result;
 
    // for(int i=0;i<size*100;i++){
-    for(int i=0;i<100;i++){
+    for(int i=0;i<size;i++){
         printf("%d\n",i);
         int index = rand()%size;
         int elem = rand();
@@ -115,38 +117,6 @@ void AVL_test5(int size){
         }
     }
     tree.printTree();
-    for(int i=355;i<0;i++){
-        printf("%d\n",i);
-        int index = rand()%size;
-        int elem = rand();
-        if(rand()%2){
-            //insert
-            if(occ[index]){
-                result=tree.insert(elem,index);
-                assert(result==AVL_KEY_ALREADY_EXISTS);
-            }
-            else{
-                result=tree.insert(elem,index);
-                assert(result==AVL_SUCCESS);
-                array[index]=elem;
-                occ[index]=true;
-            }
-        }
-        else{
-            //remove
-            if(occ[index]){
-                result=tree.remove(index);
-                assert(result==AVL_SUCCESS);
-                occ[index]=false;
-            }
-            else{
-                result=tree.remove(index);
-                assert(result==AVL_KEY_DOESNT_EXISTS);
-            }
-
-        }
-    }
-
 
     delete[](array);
     delete[](occ);
@@ -172,23 +142,23 @@ void AVL_test3(int size){
     for(int i=-size*5;i<size*5;i+=5){
         assert(AVL_SUCCESS == tree.insert(i,double(i)/13));
         assert(tree.insert(i,double(i))==AVL_KEY_ALREADY_EXISTS);
-        assert(double(i)/13 == tree.get(i));
+        assert(double(i)/13 == *tree.getElementptr(i));
     }
     int* array = tree.inorderArrayTest(2*size);
     for(int i=-size*5;i<size*5;i+=5){
-        assert(double(i)/13 == tree.get(i));
+        assert(double(i)/13 == *tree.getElementptr(i));
         assert(i == array[(i+size*5)/5]);
     }
     delete[] array;
 
     //remove lower half
     for(int i=-size*5;i<0;i+=5){
-        assert(tree.removeKey(i)==AVL_SUCCESS);
-        assert(tree.removeKey(i)==AVL_KEY_DOES_NOT_EXIST);
+        assert(tree.remove(i)==AVL_SUCCESS);
+        assert(tree.remove(i)==AVL_KEY_DOESNT_EXISTS);
     }
     for(int i=-size*5;i<0;i+=5){
         try{
-            tree.get(i);
+            *tree.getElementptr(i);
             assert(false);
         }
         catch(AVL<int,double>::AVLexception& excep){
@@ -224,12 +194,12 @@ void AVL_test3(int size){
         //std::cout<<i<<std::endl;
         //tree.removeKey(i);
         assert(tree.insert(i,double(i))==AVL_KEY_ALREADY_EXISTS);
-        assert(tree.removeKey(i)==AVL_SUCCESS);
-        assert(tree.removeKey(i) == AVL_KEY_DOES_NOT_EXIST);
+        assert(tree.remove(i)==AVL_SUCCESS);
+        assert(tree.remove(i) == AVL_KEY_DOESNT_EXISTS);
     }
 
-}
-
+}*/
+/*
 void AVL_test2(int size){
     AVL<int,double> tree;
     for(int i=-size*5;i<size*5;i+=5){
@@ -253,9 +223,10 @@ void AVL_test2(int size){
     delete[] array;
 }
 
-
+*/
+/*
 void AVL_test1(){
-    AVL<int,int> tree;
+    AvlTree<int,int> tree;
     try{
         tree.get(1);
     }
@@ -291,7 +262,7 @@ void AVL_test1(){
     assert(2==tree.NodeHeight(4));
     assert(1==tree.NodeHeight(1));
     assert(1==tree.NodeHeight(6));
-    assert(AVL_KEY_DOES_NOT_EXIST==tree.removeKey(2));
+    assert(AVL_KEY_DOESNT_EXISTS==tree.removeKey(2));
 
     assert(AVL_SUCCESS==tree.insert(3,2));
     assert(3==tree.NodeHeight(4));
@@ -314,24 +285,17 @@ void AVL_test1(){
     assert(2==tree.NodeHeight(6));
     assert(1==tree.NodeHeight(5));
 
-    assert(3==tree.get(1));
-    assert(2==tree.get(2));
-    assert(2==tree.get(3));
-    assert(2==tree.get(4));
-    assert(2==tree.get(5));
-    assert(1==tree.get(6));
+    assert(3==*tree.getElementptr(1));
+    assert(2==*tree.getElementptr(2));
+    assert(2==*tree.getElementptr(3));
+    assert(2==*tree.getElementptr(4));
+    assert(2==*tree.getElementptr(5));
+    assert(1==*tree.getElementptr(6));
 
-    int size = 6;
-    int* array = tree.inorderArrayTest(size);
-    assert(array);
-    for(int i=0;i<size;i++){
-        assert(array[i]==i+1);
-    }
-    delete[] array;
 
-    assert(tree.removeKey(5)==AVL_SUCCESS);
+    assert(tree.remove(5)==AVL_SUCCESS);
 
-    assert(tree.removeKey(6)==AVL_SUCCESS);
+    assert(tree.remove(6)==AVL_SUCCESS);
     try {
         tree.get(6);
         assert(false);
@@ -339,49 +303,35 @@ void AVL_test1(){
     catch(AVL<int,int>::AVLexception& excep){
         assert(excep.AVL_what()==AVL_KEY_DOES_NOT_EXIST);
     }
-    assert(tree.removeKey(6)==AVL_KEY_DOES_NOT_EXIST);
+    assert(tree.remove(6)==AVL_KEY_DOESNT_EXISTS);
     assert(3==tree.NodeHeight(2));
     assert(2==tree.NodeHeight(4));
     assert(1==tree.NodeHeight(3));
     assert(1==tree.NodeHeight(1));
 
 
-    assert(tree.removeKey(2)==AVL_SUCCESS);
-    assert(tree.removeKey(2)==AVL_KEY_DOES_NOT_EXIST);
+    assert(tree.remove(2)==AVL_SUCCESS);
+    assert(tree.remove(2)==AVL_KEY_DOESNT_EXISTS);
     assert(2==tree.NodeHeight(3));
     assert(1==tree.NodeHeight(4));
     assert(1==tree.NodeHeight(1));
-    try {
-        tree.get(2);
-        assert(false);
-    }
-    catch(AVL<int,int>::AVLexception& excep){
-        assert(excep.AVL_what()==AVL_KEY_DOES_NOT_EXIST);
-    }
 
-
-    assert(tree.removeKey(3)==AVL_SUCCESS);
-    assert(tree.removeKey(3)==AVL_KEY_DOES_NOT_EXIST);
+    assert(tree.removE(3)==AVL_SUCCESS);
+    assert(tree.remove(3)==AVL_KEY_DOESNT_EXISTS);
     assert(2==tree.NodeHeight(4));
     assert(1==tree.NodeHeight(1));
-    try {
-        tree.get(3);
-        assert(false);
-    }
-    catch(AVL<int,int>::AVLexception& excep){
-        assert(excep.AVL_what()==AVL_KEY_DOES_NOT_EXIST);
-    }
 
 
-    assert(tree.removeKey(1)==AVL_SUCCESS);
-    assert(tree.removeKey(1)==AVL_KEY_DOES_NOT_EXIST);
+
+    assert(tree.remove(1)==AVL_SUCCESS);
+    assert(tree.remove(1)==AVL_KEY_DOESNT_EXISTS);
     assert(1==tree.NodeHeight(4));
 
-    assert(tree.removeKey(4)==AVL_SUCCESS);
-    assert(tree.removeKey(4)==AVL_KEY_DOES_NOT_EXIST);
+    assert(tree.remove(4)==AVL_SUCCESS);
+    assert(tree.remove(4)==AVL_KEY_DOESNT_EXISTS);
 
+*/
 
-}*/
 #define WET1_DATASTRUCTS_AVL_TESTS_H
 
 #endif //WET1_DATASTRUCTS_AVL_TESTS_H

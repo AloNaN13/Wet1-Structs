@@ -31,7 +31,7 @@ Artist::~Artist() {
     // delete full_song_list
     delete[] full_songs_list;
     // delete nodes in AvlTree for streams_tree - use the destructor?
-    delete(&num_of_streams_tree);
+    //delete(&num_of_streams_tree);
 
 }
 

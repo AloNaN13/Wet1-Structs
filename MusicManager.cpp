@@ -7,8 +7,8 @@
 
 
 MusicManager:: ~MusicManager(){
-    delete &artists_tree;
-    delete &list_of_streams;
+   // delete &artists_tree;
+    //delete &list_of_streams;
 }
 
 

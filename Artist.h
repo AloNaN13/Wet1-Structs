@@ -14,12 +14,15 @@ private:
     int artist_id;
     int total_num_of_songs;
     StreamListNode** full_songs_list;
-    AvlTree<AvlTree<int,int>,int>& num_of_streams_tree;
+    AvlTree<AvlTree<int,int>,int> num_of_streams_tree;
 
 public:
     Artist(int id, int num_of_songs);
     ~Artist();
     Artist(const Artist& a) = default;
+    /*Artist(const Artist& a):artist_id(a.GetArtistID()),
+                total_num_of_songs(a.GetTotalNumOfSongs()),full_songs_list(a.full_songs_list)*/
+
     Artist& operator=(const Artist& a) = default;
 
     //getters-

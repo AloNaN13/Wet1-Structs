@@ -70,14 +70,17 @@ private:
     void fixHeightAfterInsert(Node& inserted_node);
     void fixHeightAfterRemove(Node* parent_of_removed);
     void fixHeightAfterRotation(Node* rotated_node);
-    Node* buildTreeFromArrays(Element* arrElement, Key* arrKey, int num );
-
+    Node* buildTreeFromArrays(Element* arrElement, Key* arrKey, int len );
+    static Node* copyNodes(Node* current,const Node* Node_to_copy);
 
 public:
     AvlTree():root(nullptr),iterator(nullptr),first(nullptr){};
     AvlTree(Element* arrElement, Key* arrKey, int num);
     ~AvlTree();
     AvlTree& operator=(const AvlTree&)= default;
+    AvlTree(const AvlTree& tree);
+
+
     AvlTreeResult insert (const Element& ele, const Key& key);
     AvlTreeResult remove (const Key& key);
     int getHeight(){ return root->getHeight();};
@@ -88,6 +91,8 @@ public:
         return iterator->key;
     }
     bool findKeyAlreadyExists(const Key& key);
+
+
     //newt 2 functions for testing
     void printTree(){
         if(root){
@@ -103,6 +108,8 @@ public:
         iterator= nullptr;
     }
     void printTreeInOrder(Node* startingNode);
+    const Node* getRoot() const { return  root;}
+
 
 
 };
@@ -122,21 +129,43 @@ void AvlTree<Element,Key>:: printTreeInOrder(Node* startingNode){
 }
 
 template <class Element,class Key>
+AvlTree<Element,Key>::AvlTree(const AvlTree& other):root(nullptr),iterator(nullptr),first(nullptr){
+    //Node* other_root=other.getRoot();
+    copyNodes(root,other.getRoot());
+    //root=new Node(other_root->data,other_root->key);
+
+}
+template <class Element,class Key>
+typename AvlTree<Element,Key>::Node* AvlTree<Element,Key>::copyNodes(Node* current,const Node *Node_to_copy) {
+    if(!Node_to_copy){
+        return nullptr ;
+    }
+    current=new Node(Node_to_copy->data,Node_to_copy->key);
+    current->right_son=copyNodes(current->right_son,Node_to_copy->right_son);
+    if(current->right_son){
+        current->right_son->parent=current;
+    }
+    current->left_son=copyNodes(current->left_son,Node_to_copy->left_son);
+    if(current->left_son){
+        current->left_son->parent=current;
+    }
+
+}
+
+
+
+template <class Element,class Key>
 AvlTree<Element,Key>::AvlTree(Element *arrElement, Key *arrKey, int num):root(nullptr)
                                                 ,iterator(nullptr),first(nullptr){
-
-    /*double tmp=(log(num)/log(2));
-    int height=(int)(log(num)/log(2));
-    if(tmp>height){
-        height++;
-    }*/
     root=buildTreeFromArrays(arrElement,arrKey,num);
     first=root;
     while(first && first->left_son){
         first=first->left_son;
     }
-   //create a full tree with height height
 }
+
+
+
 template <class Element,class Key>
 typename AvlTree<Element,Key>::Node* AvlTree<Element,Key>::
         buildTreeFromArrays (Element* arrElement, Key* arrKey, int len ){
@@ -486,7 +515,7 @@ void AvlTree<Element,Key>::InsertNode(Node &newNode){
 
 }
 
-//deltes the nodde and returns a pointer to the father, null is such doesnt exists
+//deletes the node and returns a pointer to the father, null is such doesnt exists
 template <class Element,class Key>
 typename AvlTree<Element,Key>::Node* AvlTree<Element,Key>::removeBinarySearch(Node* node_to_del) {
 
