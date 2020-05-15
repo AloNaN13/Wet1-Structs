@@ -22,9 +22,11 @@
 
 
 int main(){
-    //Artist art(13,3);
+    MusicManager manager;
+    manager.MMAddArtist(2,2);
+    manager.MMRemoveArtist(2);
 
-    MusicMangerTest();
+    //MusicMangerTest();
     return 0;
 }
 

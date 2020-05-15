@@ -64,12 +64,12 @@ MMStatusType MusicManager::MMRemoveArtist(int artistID){
     if(!(tree.findKeyAlreadyExists(artistID))){
         return MM_FAILURE;
     }
-    Artist& artist = *(tree.getElementptr(artistID));
+    Artist* artist = tree.getElementptr(artistID);
 
     // COMPLEXITY GOOD ENOUGH? NO NEED TO MAKE NULLS?
     StreamListNode* num_node = nullptr;
-    for(int i = 0; i < artist.GetTotalNumOfSongs(); i++){
-        num_node = artist.GetSongNumOfStreamsNode(i);
+    for(int i = 0; i < artist->GetTotalNumOfSongs(); i++){
+        num_node = artist->GetSongNumOfStreamsNode(i);
         AvlTree<AvlTree<int,int>*,int>& num_node_tree = num_node->getNodeAvlTree();
         num_node_tree.remove(artistID);
         if(num_node->GetNodeNumOfStreams() != 0){
@@ -77,10 +77,10 @@ MMStatusType MusicManager::MMRemoveArtist(int artistID){
                 this->MMGetListOfStreams().removeNode(num_node);
             }
         }
-        artist.SetStreamsNumForSong(i,nullptr);
+        artist->SetStreamsNumForSong(i,nullptr);
     }
-    int num_songs_of_artist=artist.GetTotalNumOfSongs();
-    tree.remove(artistID);
+    int num_songs_of_artist=artist->GetTotalNumOfSongs();
+    //tree.remove(artistID);
 
     this->totalNumOfSongs=this->totalNumOfSongs-num_songs_of_artist;
     return MM_SUCCESS;
@@ -186,6 +186,7 @@ MMStatusType  MusicManager::MMAddToSongCount(int artistID, int songID){
         stream_list_node_to_point_to = num_of_streams_list_node->getNextNode();
     }
     // remove the artist's node from the original node's tree
+
     if(should_remove_stream_node == true){
         AvlTree<AvlTree<int,int>*,int>& num_of_streams_list_node_tree = num_of_streams_list_node->getNodeAvlTree();
         num_of_streams_list_node_tree.remove(artistID);
