@@ -20,20 +20,23 @@ MMStatusType MusicManager:: MMAddArtist( int artistID, int numOfSongs){
     }
 
     AvlTree<Artist,int>& tree = this->MMGetArtistsTree();
+
     if(tree.findKeyAlreadyExists(artistID)){
         return MM_FAILURE;
     }
-    Artist artist_to_add = Artist(artistID, numOfSongs);
+
+    Artist* artist_to_add = new Artist(artistID, numOfSongs);
+
 
     StreamList& list = this->MMGetListOfStreams();
     StreamListNode* zero_streams_node = list.GetListFirstNode();
     // all songs now point to the "0" streams node
-    for(int i = 0; i < artist_to_add.GetTotalNumOfSongs(); i++){
-        artist_to_add.SetStreamsNumForSong(i, zero_streams_node);
+    for(int i = 0; i < artist_to_add->GetTotalNumOfSongs(); i++){
+        artist_to_add->SetStreamsNumForSong(i, zero_streams_node);
     }
 
     // insert artist into songs
-    tree.insert(artist_to_add, artistID);
+    tree.insert(*(artist_to_add), artistID);
 
     // insert pointer to the artist in "0" node AVLTree
     AvlTree<AvlTree<int,int>*,int>& node_tree = zero_streams_node->getNodeAvlTree();
@@ -95,12 +98,12 @@ MMStatusType MusicManager::MMRemoveArtist(int artistID){
 MMStatusType  MusicManager::MMAddToSongCount(int artistID, int songID){
     // Check ERRORS
 
-    if(artistID<=0 ||  songID<0){
+    if(artistID<=0 || songID<0){
         return MM_INVALID_INPUT;
     }
 
     AvlTree<Artist,int>& tree = this->MMGetArtistsTree();
-    if(tree.findKeyAlreadyExists(artistID)){
+    if(!(tree.findKeyAlreadyExists(artistID))){
         return MM_FAILURE;
     }
 
@@ -109,6 +112,7 @@ MMStatusType  MusicManager::MMAddToSongCount(int artistID, int songID){
     if(artist.GetTotalNumOfSongs()<=songID){
         return MM_INVALID_INPUT;
     }
+
     StreamList& list_of_streams = this->MMGetListOfStreams();
     AvlTree<int,int>* node_to_point_to = nullptr;
     StreamListNode* stream_list_node_to_point_to = nullptr;
@@ -235,7 +239,7 @@ MMStatusType  MusicManager:: MMNumberOfStreams(int artistID, int songID, int* st
     }
 
     AvlTree<Artist,int>& tree = this->MMGetArtistsTree();
-    if(tree.findKeyAlreadyExists(artistID)){
+    if(!(tree.findKeyAlreadyExists(artistID))){
         return MM_FAILURE;
     }
 

@@ -21,7 +21,7 @@
 
 
 int main(){
-    MusicManger_test1();
+    MusicMangerTest();
     return 0;
 }
 
