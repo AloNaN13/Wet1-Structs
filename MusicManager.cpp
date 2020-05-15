@@ -60,14 +60,14 @@ MMStatusType MusicManager::MMRemoveArtist(int artistID){
         return MM_INVALID_INPUT;
     }
 
-    AvlTree<Artist,int> tree = this->MMGetArtistsTree();
+    AvlTree<Artist,int>& tree = this->MMGetArtistsTree();
     if(!(tree.findKeyAlreadyExists(artistID))){
         return MM_FAILURE;
     }
     Artist* artist = tree.getElementptr(artistID);
 
     // COMPLEXITY GOOD ENOUGH? NO NEED TO MAKE NULLS?
-    StreamListNode* num_node = nullptr;
+    StreamListNode* num_node = artist->GetSongNumOfStreamsNode(0);
     for(int i = 0; i < artist->GetTotalNumOfSongs(); i++){
         num_node = artist->GetSongNumOfStreamsNode(i);
         AvlTree<AvlTree<int,int>*,int>& num_node_tree = num_node->getNodeAvlTree();
@@ -80,7 +80,7 @@ MMStatusType MusicManager::MMRemoveArtist(int artistID){
         artist->SetStreamsNumForSong(i,nullptr);
     }
     int num_songs_of_artist=artist->GetTotalNumOfSongs();
-    //tree.remove(artistID);
+    tree.remove(artistID);
 
     this->totalNumOfSongs=this->totalNumOfSongs-num_songs_of_artist;
     return MM_SUCCESS;
