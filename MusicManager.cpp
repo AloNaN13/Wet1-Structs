@@ -43,6 +43,7 @@ MMStatusType MusicManager:: MMAddArtist( int artistID, int numOfSongs){
     node_tree.insert((tree.getElementptr(artistID)->GetNumOfStreamsTree().getFirst()),artistID);
 
 
+    //delete(artist_to_add);
 
     this->totalNumOfSongs=this->totalNumOfSongs+numOfSongs;
     return MM_SUCCESS;
@@ -83,6 +84,7 @@ MMStatusType MusicManager::MMRemoveArtist(int artistID){
             curr_song = next_song;
         }
 
+
         num_node_tree.remove(artistID);
         if(num_node->GetNodeNumOfStreams() != 0){
             if(num_node_tree.getFirst() == nullptr){
@@ -92,6 +94,9 @@ MMStatusType MusicManager::MMRemoveArtist(int artistID){
     }
     int num_songs_of_artist=artist->GetTotalNumOfSongs();
     tree.remove(artistID);
+
+    //delete(artist);
+
 
 
     this->totalNumOfSongs=this->totalNumOfSongs-num_songs_of_artist;
