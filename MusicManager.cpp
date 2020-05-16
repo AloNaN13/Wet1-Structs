@@ -25,7 +25,7 @@ MMStatusType MusicManager:: MMAddArtist( int artistID, int numOfSongs){
         return MM_FAILURE;
     }
 
-    Artist& artist_to_add = *(new Artist(artistID, numOfSongs));
+    Artist artist_to_add(artistID, numOfSongs);
 
 
     StreamList& list = this->MMGetListOfStreams();

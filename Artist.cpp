@@ -31,10 +31,18 @@ Artist::~Artist() {
     // delete full_song_list
     delete[] full_songs_list;
     // delete nodes in AvlTree for streams_tree - use the destructor?
-    delete(&num_of_streams_tree);
+    //delete(&num_of_streams_tree);
 
 }
 
+
+Artist::Artist(const Artist& a) : artist_id(a.artist_id), total_num_of_songs(a.total_num_of_songs),
+                                    num_of_streams_tree(a.num_of_streams_tree) {
+    full_songs_list = new StreamListNode*[a.total_num_of_songs];
+    for(int i = 0; i < a.total_num_of_songs; i++){
+        full_songs_list[i] = a.full_songs_list[i];
+    }
+}
 
 StreamListNode* Artist::GetSongNumOfStreamsNode(int song_id) {
     return this->full_songs_list[song_id];
