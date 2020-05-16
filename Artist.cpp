@@ -13,13 +13,13 @@ Artist::Artist(int id, int num_of_songs) : full_songs_list((new StreamListNode*[
     // link all songs the the Node 0 in StreamList - to implement in the AddArtist Func?
 
     //create the songs tree - create an array, insert it, delete it
-    int songs_arr[num_of_songs];
+    int* songs_arr = new int[num_of_songs];
     for(int i = 0; i < num_of_songs; i++){
         songs_arr[i] = i;
     }
     AvlTree<int, int> tmp(songs_arr,songs_arr,num_of_songs);
     //AvlTree<int,int>& songs_tree = *(new AvlTree<int,int>(songs_arr, songs_arr, num_of_songs));
-    //delete[] songs_arr;
+    delete[] songs_arr;
 
     // create AvlTree for streams_tree - with first node "0" for all the songs
     num_of_streams_tree.insert(tmp,0);

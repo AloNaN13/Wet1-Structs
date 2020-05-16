@@ -25,7 +25,7 @@ private:
     StreamList list_of_streams;
     int totalNumOfSongs;
 public:
-    MusicManager():artists_tree(*new AvlTree<Artist,int>), list_of_streams(*new(StreamList)),
+    MusicManager():artists_tree(*(new AvlTree<Artist,int>())), list_of_streams(*(new StreamList())),
                    totalNumOfSongs(0){};
     ~MusicManager();
     //MusicManager(const MusicManager& music_manager) = default;
