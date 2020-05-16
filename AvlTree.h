@@ -58,6 +58,7 @@ private:
     Node* root;
     Node* iterator;
     Node* first;
+    int numOfNodes;
     void swapNodes(Node *node_to_del,Node* next_by_value);
 
     Node* removeBinarySearch(Node* node_to_del);
@@ -74,7 +75,7 @@ private:
     static Node* copyNodes(Node* current,const Node* Node_to_copy);
 
 public:
-    AvlTree():root(nullptr),iterator(nullptr),first(nullptr){};
+    AvlTree():root(nullptr),iterator(nullptr),first(nullptr),numOfNodes(0){};
     AvlTree(Element* arrElement, Key* arrKey, int num);
     ~AvlTree();
     AvlTree& operator=(const AvlTree&)= default;
@@ -91,6 +92,12 @@ public:
         return iterator->key;
     }
     bool findKeyAlreadyExists(const Key& key);
+    int getNumNodes() const { return numOfNodes;}
+
+
+
+
+
 
 
     //newt 2 functions for testing
@@ -136,6 +143,7 @@ AvlTree<Element,Key>::AvlTree(const AvlTree& other):root(nullptr),iterator(nullp
     while (first &&first->left_son){
         first=first->left_son;
     }
+    this->numOfNodes=other.getNumNodes();
     //root=new Node(other_root->data,other_root->key);
 
 }
@@ -756,12 +764,14 @@ AvlTreeResult AvlTree<Element,Key>::insert(const Element &ele, const Key& key) {
         first=ptr;
     }
 
+    numOfNodes++;
     return AVL_SUCCESS;
 
 }
 
 template <class Element,class Key>
 AvlTreeResult AvlTree<Element,Key>:: remove (const Key& key){
+
     if(!findKeyAlreadyExists(key)){
         return  AVL_KEY_DOESNT_EXISTS;
     }
@@ -809,6 +819,7 @@ AvlTreeResult AvlTree<Element,Key>:: remove (const Key& key){
             first=first->left_son;
         }
     }
+    numOfNodes--;
     return AVL_SUCCESS;
 }
 
