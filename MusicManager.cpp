@@ -298,6 +298,9 @@ MMStatusType MusicManager:: MMGetRecommendedSongs(void* DS, int numOfSongs, int*
 }*/
 
 MMStatusType MusicManager:: MMgetRecommendedSongs( int numOfSongs, int* artists, int* songs){
+    if(numOfSongs<=0){
+        return MM_INVALID_INPUT;
+    }
     if(numOfSongs>totalNumOfSongs){
         return MM_FAILURE;
     }
