@@ -15,9 +15,9 @@ add_executable(Wet1_Structs
         library1.h
         List.cpp
         List.h
-        #main.cpp
+        main.cpp
         #main1.cpp
-        main_alon.cpp
+        #main_alon.cpp
         MusicManager.cpp
         MusicManager.h
         MusicManger_sari_tests.h

@@ -136,7 +136,7 @@ void AvlTree<Element,Key>:: printTreeInOrder(Node* startingNode){
 }
 
 template <class Element,class Key>
-AvlTree<Element,Key>::AvlTree(const AvlTree& other):root(nullptr),iterator(nullptr),first(nullptr){
+AvlTree<Element,Key>::AvlTree(const AvlTree& other):root(nullptr),iterator(nullptr),first(nullptr),numOfNodes(0){
     //Node* other_root=other.getRoot();
     root=copyNodes(root,other.getRoot());
     first=root;
@@ -757,6 +757,7 @@ AvlTreeResult AvlTree<Element,Key>::insert(const Element &ele, const Key& key) {
         root->hr=0;
         root->hl=0;
         first=root;
+        numOfNodes++;
         return AVL_SUCCESS;
     }
     InsertNode(*ptr);
@@ -786,6 +787,7 @@ AvlTreeResult AvlTree<Element,Key>:: remove (const Key& key){
         root= nullptr;
         first= nullptr;
         iterator= nullptr;
+        numOfNodes--;
         return AVL_SUCCESS;
     }
 

@@ -82,6 +82,7 @@ MMStatusType MusicManager::MMRemoveArtist(int artistID){
     int num_songs_of_artist=artist->GetTotalNumOfSongs();
     tree.remove(artistID);
 
+
     this->totalNumOfSongs=this->totalNumOfSongs-num_songs_of_artist;
     return MM_SUCCESS;
 
