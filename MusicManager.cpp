@@ -114,8 +114,8 @@ MMStatusType  MusicManager::MMAddToSongCount(int artistID, int songID){
     }
 
     //get the tree, the artist and the list
-    Artist& artist = *(tree.getElementptr(artistID));
-    if(artist.GetTotalNumOfSongs()<=songID){
+    Artist* artist = tree.getElementptr(artistID);
+    if(artist->GetTotalNumOfSongs()<=songID){
         return MM_INVALID_INPUT;
     }
 
@@ -125,8 +125,8 @@ MMStatusType  MusicManager::MMAddToSongCount(int artistID, int songID){
 
 
     //change in the ArtistsTree
-    AvlTree<AvlTree<int,int>,int>& num_of_streams_tree = artist.GetNumOfStreamsTree();
-    StreamListNode* num_of_streams_list_node = artist.GetSongNumOfStreamsNode(songID);
+    AvlTree<AvlTree<int,int>,int>& num_of_streams_tree = artist->GetNumOfStreamsTree();
+    StreamListNode* num_of_streams_list_node = artist->GetSongNumOfStreamsNode(songID);
     int songs_num_of_streams = num_of_streams_list_node->GetNodeNumOfStreams();
     // remove song node
     AvlTree<int,int>& num_of_streams_tree_node = *(num_of_streams_tree.getElementptr(songs_num_of_streams));
@@ -200,7 +200,7 @@ MMStatusType  MusicManager::MMAddToSongCount(int artistID, int songID){
 
 
     // change in the songs array
-    artist.SetStreamsNumForSong(songID,stream_list_node_to_point_to);
+    artist->SetStreamsNumForSong(songID,stream_list_node_to_point_to);
 
     return MM_SUCCESS;
 
