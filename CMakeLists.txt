@@ -11,13 +11,13 @@ add_executable(Wet1_Structs
         #AVL_tests.h
         AVL_tests.h
         AvlTree.h
-        libary1.cpp
+        library1.cpp
         library1.h
         List.cpp
         List.h
         #main.cpp
-        #main1.cpp
-        main_alon.cpp
+        main1.cpp
+        #main_alon.cpp
         MusicManager.cpp
         MusicManager.h
         MusicManger_sari_tests.h
