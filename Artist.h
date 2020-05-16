@@ -19,9 +19,8 @@ private:
 public:
     Artist(int id, int num_of_songs);
     ~Artist();
-    Artist(const Artist& a) = default;
-    /*Artist(const Artist& a):artist_id(a.GetArtistID()),
-                total_num_of_songs(a.GetTotalNumOfSongs()),full_songs_list(a.full_songs_list)*/
+    //Artist(const Artist& a) = default;
+    Artist(const Artist& a);
 
     Artist& operator=(const Artist& a) = default;
 
