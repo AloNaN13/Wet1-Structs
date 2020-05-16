@@ -22,24 +22,25 @@
 
 
 int main(){
+/*
     MusicManager manager;
     manager.MMRemoveArtist(1);
     manager.MMAddArtist(1,5);
-    manager.MMAddArtist(1,3);
-    manager.MMAddArtist(1,7);
-    manager.MMAddArtist(2,7);
+    //manager.MMAddArtist(1,3);
+    //manager.MMAddArtist(1,7);
+    //manager.MMAddArtist(2,7);
 
-    manager.MMAddToSongCount(2,1);
+    //manager.MMAddToSongCount(2,1);
 
     manager.MMAddToSongCount(1,4);
-    manager.MMAddToSongCount(1,3);
+    //manager.MMAddToSongCount(1,3);
     manager.MMAddToSongCount(1,0);
 
     manager.MMRemoveArtist(1);
     //manager.MMRemoveArtist(2);
+*/
 
-
-    //MusicMangerTest();
+    MusicMangerTest();
     return 0;
 }
 
