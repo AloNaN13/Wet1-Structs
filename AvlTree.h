@@ -1,7 +1,3 @@
-//
-// Created by User on 4/30/2020.
-//
-
 
 #ifndef MIVNE_AVLTREE_H
 #define MIVNE_AVLTREE_H
@@ -11,6 +7,7 @@
 #include <cmath>
 #include <iostream>
 #include <assert.h>
+
 using namespace std;
 
 typedef enum AvlTreeResult_t{AVL_KEY_ALREADY_EXISTS,AVL_SUCCESS,AVL_ALLOCATION_ERROR
@@ -29,7 +26,6 @@ private:
         Node* parent;
         int hl;
         int hr;
-
 
         Node(const Element& data,const Key& key):data(*(new Element(data))),key(*(new Key(key))),right_son(nullptr)
                 ,left_son(nullptr),parent(nullptr),hl(0),hr(0){};
@@ -53,8 +49,6 @@ private:
         Node* FindNext();
     };
 
-
-
     Node* root;
     Node* iterator;
     Node* first;
@@ -64,7 +58,7 @@ private:
     Node* removeBinarySearch(Node* node_to_del);
     void InsertNode(Node &newNode);
     void deleteAllNodes(Node* node);
-    void BalanceInsert(Node& starting_balance_node);
+    void BalanceInsert(Node& insertedNode);
     void BalanceRemove(Node* node);
     void rotateLeft(Node& node);
     void rotateRight(Node& node);
@@ -73,14 +67,12 @@ private:
     void fixHeightAfterRotation(Node* rotated_node);
     Node* buildTreeFromArrays(Element* arrElement, Key* arrKey, int len );
     static Node* copyNodes(Node* current,const Node* Node_to_copy);
-
 public:
     AvlTree():root(nullptr),iterator(nullptr),first(nullptr),numOfNodes(0){};
     AvlTree(Element* arrElement, Key* arrKey, int num);
     ~AvlTree();
+    AvlTree(const AvlTree& other);
     AvlTree& operator=(const AvlTree&)= default;
-    AvlTree(const AvlTree& tree);
-
 
     AvlTreeResult insert (const Element& ele, const Key& key);
     AvlTreeResult remove (const Key& key);
@@ -93,12 +85,6 @@ public:
     }
     bool findKeyAlreadyExists(const Key& key);
     int getNumNodes() const { return numOfNodes;}
-
-
-
-
-
-
 
     //newt 2 functions for testing
     void printTree(){
@@ -117,8 +103,6 @@ public:
     void printTreeInOrder(Node* startingNode);
     const Node* getRoot() const { return  root;}
 
-
-
 };
 
 template <class Element,class Key>
@@ -130,8 +114,6 @@ void AvlTree<Element,Key>:: printTreeInOrder(Node* startingNode){
 
     cout<< (int)startingNode->key << " BF: "<< startingNode->getBalanceFactor()<< " H: "<<startingNode->getHeight()<<"\n";
     printTreeInOrder(startingNode->right_son);
-
-
 
 }
 
@@ -145,8 +127,8 @@ AvlTree<Element,Key>::AvlTree(const AvlTree& other):root(nullptr),iterator(nullp
     }
     this->numOfNodes=other.getNumNodes();
     //root=new Node(other_root->data,other_root->key);
-
 }
+
 template <class Element,class Key>
 typename AvlTree<Element,Key>::Node* AvlTree<Element,Key>::copyNodes(Node* current,const Node *Node_to_copy) {
     if(!Node_to_copy){
@@ -164,10 +146,7 @@ typename AvlTree<Element,Key>::Node* AvlTree<Element,Key>::copyNodes(Node* curre
     current->hr=Node_to_copy->hr;
     current->hl=Node_to_copy->hl;
     return current;
-
 }
-
-
 
 template <class Element,class Key>
 AvlTree<Element,Key>::AvlTree(Element *arrElement, Key *arrKey, int num):root(nullptr)
@@ -178,8 +157,6 @@ AvlTree<Element,Key>::AvlTree(Element *arrElement, Key *arrKey, int num):root(nu
         first=first->left_son;
     }
 }
-
-
 
 template <class Element,class Key>
 typename AvlTree<Element,Key>::Node* AvlTree<Element,Key>::
@@ -206,7 +183,6 @@ typename AvlTree<Element,Key>::Node* AvlTree<Element,Key>::
             }
     return currentNode;
 }
-
 
 template <class Element,class Key>
 Element* AvlTree<Element,Key>::getFirst() {
@@ -239,9 +215,7 @@ Element* AvlTree<Element,Key>::getNext() {
     }
     iterator=iterator->parent;
     return &iterator->data;
-
 }
-
 
 template <class Element,class Key>
 Element* AvlTree<Element,Key>::getElementptr(const Key &key) {
@@ -250,8 +224,6 @@ Element* AvlTree<Element,Key>::getElementptr(const Key &key) {
     }
     Node& wanted=root->getNodeFromKey(key);
     return &wanted.data;
-
-
 }
 
 template <class Element,class Key>
@@ -270,7 +242,6 @@ void AvlTree<Element,Key>:: fixHeightAfterInsert(Node& inserted_node){
         parent=tmp->parent;
     }
 }
-
 
 template <class Element,class Key>
 void AvlTree<Element,Key>::fixHeightAfterRemove(Node* parent_of_removed) {
@@ -292,13 +263,12 @@ void AvlTree<Element,Key>::fixHeightAfterRemove(Node* parent_of_removed) {
     while (parent!=nullptr){
         if(parent->left_son==tmp){
             parent->hl=tmp->getHeight();
-        } else if(parent->right_son=tmp){
+        } else if(parent->right_son==tmp){
             parent->hr=tmp->getHeight();
         }
         tmp=parent;
         parent=tmp->parent;
     }
-
 }
 
 template <class Element,class Key>
@@ -343,7 +313,7 @@ int AvlTree<Element,Key>::Node::getBalanceFactor() {
     return left_son->getHeight()-right_son->getHeight();
 }
 
-//caleed only if we sure there is a node
+//caleed only if we are sure there is a node
 template <class Element,class Key>
 typename AvlTree<Element,Key>::Node&  AvlTree<Element,Key>::Node::getNodeFromKey(const Key key){
     Node* tmp=this;
@@ -358,10 +328,10 @@ typename AvlTree<Element,Key>::Node&  AvlTree<Element,Key>::Node::getNodeFromKey
             tmp= (tmp->left_son);
         }
     }
+
+    // does not reach here - only for the compiler's warning
+    return *tmp;
 }
-
-
-
 
 template <class Element,class Key>
 typename AvlTree<Element,Key>::Node* AvlTree<Element,Key>::Node::FindNext() {
@@ -374,8 +344,6 @@ typename AvlTree<Element,Key>::Node* AvlTree<Element,Key>::Node::FindNext() {
     }
     return nextByOrder;
 }
-
-
 
 template <class Element,class Key>
 AvlTree<Element,Key>::~AvlTree(){
@@ -392,10 +360,8 @@ void AvlTree<Element,Key>::deleteAllNodes(Node *node) {
     if(node){
         deleteAllNodes((node->right_son));
         deleteAllNodes((node->left_son));
-
         delete(node);
     }
-
 }
 
 template <class Element,class Key>
@@ -490,10 +456,6 @@ void AvlTree<Element,Key>::rotateRight(AvlTree<Element, Key>::Node &node) {
     A->hr++;
 }
 
-
-
-
-
 template <class Element,class Key>
 void AvlTree<Element,Key>::InsertNode(Node &newNode){
    if(root== nullptr){
@@ -526,8 +488,6 @@ void AvlTree<Element,Key>::InsertNode(Node &newNode){
 
         }
     }
-
-
 }
 
 //deletes the node and returns a pointer to the father, null is such doesnt exists
@@ -539,7 +499,6 @@ typename AvlTree<Element,Key>::Node* AvlTree<Element,Key>::removeBinarySearch(No
         swapNodes(node_to_del,next_by_value);
     }
     Node* parent=node_to_del->parent;
-
 
     if(parent== nullptr){//the tree has maximum 2 nodes
         if(node_to_del->right_son!= nullptr){
@@ -559,7 +518,6 @@ typename AvlTree<Element,Key>::Node* AvlTree<Element,Key>::removeBinarySearch(No
         }
 
     }
-
 
     if(node_to_del->left_son==nullptr&& node_to_del->right_son== nullptr){//its a leaf
         if(parent->right_son==node_to_del){
@@ -605,6 +563,10 @@ typename AvlTree<Element,Key>::Node* AvlTree<Element,Key>::removeBinarySearch(No
         fixHeightAfterRemove(parent);
         return parent;
     }
+
+    // does not reach here - only for the compiler's warning
+    return nullptr;
+
 }
 
 //we call the swap during just the removal
@@ -646,7 +608,6 @@ void AvlTree<Element,Key>::swapNodes(Node* node_to_del,Node* next_by_value) {
         }
     }
 
-
     next_by_value->hr=node_to_del->hr;
     next_by_value->hl=node_to_del->hl;
     Node *parent=next_by_value->getParent();
@@ -679,9 +640,6 @@ void AvlTree<Element,Key>::swapNodes(Node* node_to_del,Node* next_by_value) {
         parent->parent=next_by_value;
     }
 }
-
-
-
 
 template <class Element,class Key>
 void AvlTree<Element,Key>:: BalanceInsert(Node& insertedNode){
@@ -718,7 +676,6 @@ void AvlTree<Element,Key>:: BalanceInsert(Node& insertedNode){
 
 
 
-
 //now its the functions of the tree
 
 template <class Element,class Key>
@@ -740,7 +697,6 @@ bool AvlTree<Element,Key>::findKeyAlreadyExists(const Key& key){
         }
     }
     return false;
-
 }
 
 template <class Element,class Key>
@@ -764,10 +720,8 @@ AvlTreeResult AvlTree<Element,Key>::insert(const Element &ele, const Key& key) {
     if(key<first->key){
         first=ptr;
     }
-
     numOfNodes++;
     return AVL_SUCCESS;
-
 }
 
 template <class Element,class Key>
@@ -779,9 +733,7 @@ AvlTreeResult AvlTree<Element,Key>:: remove (const Key& key){
     Node& node_to_del=root->getNodeFromKey(key);
     bool setFirst=(&node_to_del==first);
     Node* parent=removeBinarySearch(&node_to_del);
-
    // assert(findKeyAlreadyExists(key)== false);
-
 
     if(parent== nullptr){
         root= nullptr;
@@ -809,7 +761,7 @@ AvlTreeResult AvlTree<Element,Key>:: remove (const Key& key){
         //balanceAfterRemove(*parent);
         parent=parent->parent;
     }
-//    balanceAfterRemove(*parent);
+    // balanceAfterRemove(*parent);
 
     if(setFirst){
         if(root== nullptr){
@@ -824,7 +776,6 @@ AvlTreeResult AvlTree<Element,Key>:: remove (const Key& key){
     numOfNodes--;
     return AVL_SUCCESS;
 }
-
 
 template <class Element,class Key>
 void AvlTree<Element,Key>::BalanceRemove(Node *node) {
@@ -853,7 +804,5 @@ void AvlTree<Element,Key>::BalanceRemove(Node *node) {
         return;
     }
 }
-
-
 
 #endif //MIVNE_AVLTREE_H

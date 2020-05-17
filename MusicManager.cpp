@@ -1,19 +1,8 @@
-//
-// Created by User on 5/10/2020.
-//
 
 #include "MusicManager.h"
 
 
-
-MusicManager:: ~MusicManager(){
-    //delete &artists_tree;
-    //delete &list_of_streams;
-}
-
-
 MMStatusType MusicManager:: MMAddArtist( int artistID, int numOfSongs){
-    // check ERRORS
 
     if(artistID<=0 ||  numOfSongs <=0){
         return MM_INVALID_INPUT;
@@ -42,20 +31,12 @@ MMStatusType MusicManager:: MMAddArtist( int artistID, int numOfSongs){
     AvlTree<AvlTree<int,int>*,int>& node_tree = zero_streams_node->getNodeAvlTree();
     node_tree.insert((tree.getElementptr(artistID)->GetNumOfStreamsTree().getFirst()),artistID);
 
-
-    //delete(artist_to_add);
-
     this->totalNumOfSongs=this->totalNumOfSongs+numOfSongs;
     return MM_SUCCESS;
 
 }
 
-
-
-
-
 MMStatusType MusicManager::MMRemoveArtist(int artistID){
-    // Check ERRORS
 
     if(artistID<=0 ){
         return MM_INVALID_INPUT;
@@ -67,8 +48,7 @@ MMStatusType MusicManager::MMRemoveArtist(int artistID){
     }
     Artist* artist = tree.getElementptr(artistID);
 
-    // COMPLEXITY GOOD ENOUGH?
-    StreamListNode* num_node = artist->GetSongNumOfStreamsNode(0);
+    StreamListNode* num_node;
     AvlTree<int,int>* songs_to_null_tree = nullptr;
     for(int i = 0; i < artist->GetTotalNumOfSongs(); i++){
         num_node = artist->GetSongNumOfStreamsNode(i);
@@ -83,8 +63,6 @@ MMStatusType MusicManager::MMRemoveArtist(int artistID){
             artist->SetStreamsNumForSong(*curr_song,nullptr);
             curr_song = next_song;
         }
-
-
         num_node_tree.remove(artistID);
         if(num_node->GetNodeNumOfStreams() != 0){
             if(num_node_tree.getFirst() == nullptr){
@@ -95,31 +73,12 @@ MMStatusType MusicManager::MMRemoveArtist(int artistID){
     int num_songs_of_artist=artist->GetTotalNumOfSongs();
     tree.remove(artistID);
 
-    //delete(artist);
-
-
-
     this->totalNumOfSongs=this->totalNumOfSongs-num_songs_of_artist;
     return MM_SUCCESS;
 
-    // go to songs list
-    // for every song
-    // go to the node in the StreamList
-    // if NULL - proceed to next song
-    // remove the artist pointer from each node
-    // remove the artist by key in the node's AVL Tree
-    // change the pointer to NULL
-    // delete the artist - remove from tree
-    // delete the node if there are no more artists left
-
 }
 
-
-
-
-
 MMStatusType  MusicManager::MMAddToSongCount(int artistID, int songID){
-    // Check ERRORS
 
     if(artistID<=0 || songID<0){
         return MM_INVALID_INPUT;
@@ -136,10 +95,9 @@ MMStatusType  MusicManager::MMAddToSongCount(int artistID, int songID){
         return MM_INVALID_INPUT;
     }
 
-    StreamList& list_of_streams = this->MMGetListOfStreams();
+    //StreamList& list_of_streams = this->MMGetListOfStreams();
     AvlTree<int,int>* node_to_point_to = nullptr;
     StreamListNode* stream_list_node_to_point_to = nullptr;
-
 
     //change in the ArtistsTree
     AvlTree<AvlTree<int,int>,int>& num_of_streams_tree = artist->GetNumOfStreamsTree();
@@ -165,32 +123,10 @@ MMStatusType  MusicManager::MMAddToSongCount(int artistID, int songID){
         node_to_point_to = num_of_streams_tree.getElementptr(songs_num_of_streams+1);
     }
 
-    /* OLD CODE
-    AvlTree<int,int>& num_of_streams_tree_next_node = *(num_of_streams_tree.getNext()) // HOW TO USE GetNext?
-    if(num_of_streams_tree_next_node.getKey() == ) {         // HOW TO USE GetKey?
-        // get the next num_of_streams node
-        // check if +1 exists
-        // if yes - add the song to it
-        node_to_point_to = &num_of_streams_tree_next_node;
-    }
-    else if{
-        AvlTree<int,int>& new_songs_tree = AvlTree<int,int>();
-        new_songs_tree.insert(songID,songID);
-        num_of_streams_tree.insert(new_songs_tree, songs_num_of_streams+1);
-        node_to_point_to = num_of_streams_tree.getElementptr(songs_num_of_streams+1);
-    }
-
-     */
-
-
-
-
-
-
-
     // change in the List
     StreamListNode* num_of_streams_list_next_node = num_of_streams_list_node->getNextNode();
-    if(num_of_streams_list_next_node != nullptr && num_of_streams_list_next_node->GetNodeNumOfStreams() == songs_num_of_streams+1){
+    if(num_of_streams_list_next_node != nullptr && num_of_streams_list_next_node->GetNodeNumOfStreams()
+                            == songs_num_of_streams+1){
         AvlTree<AvlTree<int,int>*,int>& num_of_streams_list_next_node_tree =
                 num_of_streams_list_next_node->getNodeAvlTree();
         num_of_streams_list_next_node_tree.insert(node_to_point_to,artistID);
@@ -204,8 +140,7 @@ MMStatusType  MusicManager::MMAddToSongCount(int artistID, int songID){
     }
 
     // remove the artist's node from the original node's tree
-
-    if(should_remove_stream_node == true){
+    if(should_remove_stream_node){
         AvlTree<AvlTree<int,int>*,int>& num_of_streams_list_node_tree = num_of_streams_list_node->getNodeAvlTree();
         num_of_streams_list_node_tree.remove(artistID);
         if(num_of_streams_list_node->GetNodeNumOfStreams() != 0){
@@ -215,56 +150,14 @@ MMStatusType  MusicManager::MMAddToSongCount(int artistID, int songID){
         }
     }
 
-
     // change in the songs array
     artist->SetStreamsNumForSong(songID,stream_list_node_to_point_to);
 
     return MM_SUCCESS;
 
-
-    //get the tree, the artist and the list
-
-    //change in the ArtistsTree
-    // find the songs num_of_streams in the array
-    // get the right num_of_streams tree
-    // remove song node from it
-    // check if it was the only song in the tree
-    // if yes - remove the num_of_streams node
-    // get the next num_of_streams node
-    // check if +1 exists
-    // if yes - add the song to it
-    // if no - create a new num_of_streams node and add the song to it
-
-    // change in the List
-    // get the node in the StreamList from the songs array
-    // get the node's AVLTree
-    // check if next exists
-    // if yes - get the pointer to the element (the tree)
-    // if no - create one and add
-// OLD PART
-    // get the next StreamListNode
-    // check if +1
-    // if yes - add the artist to it - pointer to the new "num_of_streams" node
-    // if no
-    // add a new +1 node to the StreamList
-    // add the artist to the node's tree - pointer the the new "num_of_streams" node
-// END OF OLD PART
-    // remove the artist's node from the tree
-    // check if it wasn't the first node
-    // check if it was the only song in the tree
-    // if yes - remove the node from the List
-
-    // change in the songs array
-    // change the pointer in the songID index to points to the new node in the StreamList
-
 }
 
-
-
-
-
 MMStatusType  MusicManager:: MMNumberOfStreams(int artistID, int songID, int* streams){
-    // return ERRORS
 
     if(artistID<=0 ||  streams == nullptr || songID<0){
         return MM_INVALID_INPUT;
@@ -288,20 +181,6 @@ MMStatusType  MusicManager:: MMNumberOfStreams(int artistID, int songID, int* st
 
 }
 
-
-
-
-/*
-MMStatusType MusicManager:: MMGetRecommendedSongs(void* DS, int numOfSongs, int* artists, int* songs){
-    if(DS== nullptr || numOfSongs<=0){
-        return MM_INVALID_INPUT;
-    }
-    if(numOfSongs<=0){
-        return MM_ALLOCATION_ERROR;
-    }
-    DS.getRecommendedSongs( int numOfSongs, int* artists, int* songs);
-}*/
-
 MMStatusType MusicManager:: MMgetRecommendedSongs( int numOfSongs, int* artists, int* songs){
     if(numOfSongs<=0){
         return MM_ALLOCATION_ERROR;
@@ -311,12 +190,12 @@ MMStatusType MusicManager:: MMgetRecommendedSongs( int numOfSongs, int* artists,
     }
     StreamListNode* current_Node_of_hearings=list_of_streams.GetListLastNode();
     int count=0;;
-    Artist* currentArtist;
+    //Artist* currentArtist;
     AvlTree<int,int>* songs_of_current_artist_with_num_streams;
     int* song;
     int current_ArtistId;
     while (count<numOfSongs){
-        int numStreams=0;
+        //int numStreams=0;
         songs_of_current_artist_with_num_streams=*(((current_Node_of_hearings->getNodeAvlTree())).getFirst());
 
         while (count<numOfSongs &&songs_of_current_artist_with_num_streams){
@@ -343,5 +222,4 @@ MMStatusType MusicManager:: MMgetRecommendedSongs( int numOfSongs, int* artists,
     return MM_SUCCESS;
 
 }
-
 

@@ -1,6 +1,3 @@
-//
-// Created by User on 5/10/2020.
-//
 
 #ifndef WET1_STRUCTS_MUSICMANAGER_H
 #define WET1_STRUCTS_MUSICMANAGER_H
@@ -9,15 +6,13 @@
 #include "List.h"
 #include "Artist.h"
 
-// should these enums be exceptions?
+// decided on enums for exceptions
 typedef enum MMStatusType_t{
     MM_ALLOCATION_ERROR,
     MM_INVALID_INPUT,
     MM_FAILURE,
     MM_SUCCESS
 }MMStatusType;
-
-
 
 class MusicManager{
 private:
@@ -26,24 +21,19 @@ private:
     int totalNumOfSongs;
 public:
     MusicManager(): totalNumOfSongs(0){};
-    ~MusicManager();
-    //MusicManager(const MusicManager& music_manager) = default;
+    ~MusicManager() = default;
+    MusicManager(const MusicManager& music_manager) = default;
     MusicManager& operator=(const MusicManager& music_manager) = default;
 
-    //methods
     StreamList& MMGetListOfStreams() {return this->list_of_streams;};
     AvlTree<Artist,int>& MMGetArtistsTree() {return this->artists_tree;};
-
-
     MMStatusType MMAddArtist(int artistID, int numOfSongs);
     MMStatusType MMRemoveArtist(int artistID);
     MMStatusType MMAddToSongCount(int artistID, int songID);
     MMStatusType MMNumberOfStreams(int artistID, int songID, int* streams);
     MMStatusType MMgetRecommendedSongs( int numOfSongs, int* artists, int* songs);
 
-
 };
-
 
 
 #endif //WET1_STRUCTS_MUSICMANAGER_H
