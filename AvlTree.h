@@ -34,8 +34,6 @@ private:
             delete &key;
         };
         Node& operator=(const Node&)= default;
-        //Node& operator=(Node&)= default;
-
         int getHeight(){
             if(hl>hr){
                 return 1+hl;
@@ -80,18 +78,11 @@ public:
     Element* getElementptr(const Key& key);
     Element* getFirst();
     Element* getNext();
-    const Key& getKey(){
-        return iterator->key;
-    }
+    const Key& getKey(){return iterator->key;}
     bool findKeyAlreadyExists(const Key& key);
     int getNumNodes() const { return numOfNodes;}
 
     //newt 2 functions for testing
-    void printTree(){
-        if(root){
-           printTreeInOrder(root) ;
-        }
-    }
     void clear(){
         if (root != nullptr) {
             deleteAllNodes(root);
@@ -105,21 +96,14 @@ public:
 
 };
 
-template <class Element,class Key>
-void AvlTree<Element,Key>:: printTreeInOrder(Node* startingNode){
-    if(!startingNode){
-        return;
-    }
-    printTreeInOrder(startingNode->left_son);
 
-    cout<< (int)startingNode->key << " BF: "<< startingNode->getBalanceFactor()<< " H: "<<startingNode->getHeight()<<"\n";
-    printTreeInOrder(startingNode->right_son);
 
-}
-
+/***
+ * The copy ctor of the Tree, creates a new tree that looks exactly the same as th other tree
+ * @param other-the AvlTree that need to be copied
+ */
 template <class Element,class Key>
 AvlTree<Element,Key>::AvlTree(const AvlTree& other):root(nullptr),iterator(nullptr),first(nullptr),numOfNodes(0){
-    //Node* other_root=other.getRoot();
     root=copyNodes(root,other.getRoot());
     first=root;
     while (first &&first->left_son){
@@ -129,6 +113,13 @@ AvlTree<Element,Key>::AvlTree(const AvlTree& other):root(nullptr),iterator(nullp
     //root=new Node(other_root->data,other_root->key);
 }
 
+/***
+ * a recursic helper fucntion, thats called from the copy ctor of the tree,
+ * allocates new memory and copies all the nodes using recursion
+ * @param current -The node we want to put in the arguments of Node_to_copy
+ * @param Node_to_copy -The Node that we want to copy
+ * @return -a pointer to current
+ */
 template <class Element,class Key>
 typename AvlTree<Element,Key>::Node* AvlTree<Element,Key>::copyNodes(Node* current,const Node *Node_to_copy) {
     if(!Node_to_copy){
@@ -148,6 +139,15 @@ typename AvlTree<Element,Key>::Node* AvlTree<Element,Key>::copyNodes(Node* curre
     return current;
 }
 
+
+/***
+ * constractor to the tree that creaets a new tree with num Nodes, with complesity O(num),
+ * because it enters  the nodes to the tree in such order that balancing wont be
+ * necessery(using buildTreeFromArrays func)
+ * @param arrElement- sorted array of elements
+ * @param arrKey- sorted array of keys
+ * @param num - the length of the 2 arrays
+ */
 template <class Element,class Key>
 AvlTree<Element,Key>::AvlTree(Element *arrElement, Key *arrKey, int num):root(nullptr)
                                                 ,iterator(nullptr),first(nullptr){
@@ -158,6 +158,15 @@ AvlTree<Element,Key>::AvlTree(Element *arrElement, Key *arrKey, int num):root(nu
     }
 }
 
+/***
+ * creates len nodes using recursion where in the node i there is element that equals to arrElement[i]
+ * and the key equals to arrKey[i], the time complecity of the func is O(len),
+ * than the first Node we created will be the root of the new tree we created in the constractor
+ * that gets 3 arguments, balancing wont be necessery because we using the fact that the arrays are sorted.
+ * @param arrElement- sorted array of elements
+ * @param arrKey- sorted array of keys
+ * @param len - the length of the 2 arrays
+ */
 template <class Element,class Key>
 typename AvlTree<Element,Key>::Node* AvlTree<Element,Key>::
         buildTreeFromArrays (Element* arrElement, Key* arrKey, int len ){
@@ -184,6 +193,11 @@ typename AvlTree<Element,Key>::Node* AvlTree<Element,Key>::
     return currentNode;
 }
 
+/***
+ * sets the iterator to the minimal node(by key) in the tree and returns a pointer
+ * to his data
+ * @return -pointer to the data of the minimal Node in the tree, null_ptr if the tree is empty
+ */
 template <class Element,class Key>
 Element* AvlTree<Element,Key>::getFirst() {
     if(root== nullptr){
@@ -193,7 +207,14 @@ Element* AvlTree<Element,Key>::getFirst() {
     return &iterator->data;
 }
 
-//returns null ptr if iterator is null or iterator is on the largest node in the tree
+
+/***
+ * sess iterator to the next Node by order in the tree and returns its data, if
+ * the iterator is already on the largest tree in the node, than it sets the iterator
+ * to null_ptr
+ * @return -the above if its possible, returns null_ptr if the iterator is null,
+ * or if its in the largest Node in the tree,
+ */
 template <class Element,class Key>
 Element* AvlTree<Element,Key>::getNext() {
     if(iterator== nullptr){
@@ -217,6 +238,12 @@ Element* AvlTree<Element,Key>::getNext() {
     return &iterator->data;
 }
 
+/***
+ *
+ * @param key- the key of the data we want to get
+ * @return - a pointer to the element of the node with Key of the key we get,
+ * null_ptr if such dose'nt exicts
+ */
 template <class Element,class Key>
 Element* AvlTree<Element,Key>::getElementptr(const Key &key) {
     if(!findKeyAlreadyExists(key)){
@@ -344,7 +371,9 @@ typename AvlTree<Element,Key>::Node* AvlTree<Element,Key>::Node::FindNext() {
     }
     return nextByOrder;
 }
-
+/***
+ * the destractor of the tree, first deletes all the nodes so there won't be memoryLeak
+ */
 template <class Element,class Key>
 AvlTree<Element,Key>::~AvlTree(){
     if(root){
@@ -354,7 +383,10 @@ AvlTree<Element,Key>::~AvlTree(){
     root= nullptr;
     iterator= nullptr;
 }
-
+/***
+ * deletes all the nodes of the tree using postOrder algo,
+ * @param node -the node we want to delete
+ */
 template <class Element,class Key>
 void AvlTree<Element,Key>::deleteAllNodes(Node *node) {
     if(node){
@@ -363,6 +395,7 @@ void AvlTree<Element,Key>::deleteAllNodes(Node *node) {
         delete(node);
     }
 }
+
 
 template <class Element,class Key>
 void AvlTree<Element,Key>::rotateLeft(AvlTree<Element, Key>::Node &node) {
@@ -757,11 +790,9 @@ AvlTreeResult AvlTree<Element,Key>:: remove (const Key& key){
             parent->hr=0;
         };
         BalanceRemove(parent);
-        //Balance2(*parent);
-        //balanceAfterRemove(*parent);
+
         parent=parent->parent;
     }
-    // balanceAfterRemove(*parent);
 
     if(setFirst){
         if(root== nullptr){
